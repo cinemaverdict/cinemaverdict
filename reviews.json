@@ -10,5 +10,11 @@
     "image": "lagaan.jpg",
     "rating": "5/5",
     "verdict": "Highly Recommended"
-  }
+  },
+  {
+  "title": "titanic",
+  "image": "titanic.jpg",
+  "rating": "5/5",
+  "verdict": "must watch"
+}
 ]

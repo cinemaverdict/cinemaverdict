@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cinema Verdict Studio</title>
+</head>
+
+<body style="background:black; color:white; font-family:Arial; padding:40px;">
+
+<h2>🔒 Cinema Verdict Studio</h2>
+
+<input id="pass" placeholder="Enter Password">
+<button onclick="login()">Login</button>
+
+<div id="panel" style="display:none; margin-top:30px;">
+
+  <h3>Add Review</h3>
+
+  <input id="title" placeholder="Movie Title"><br><br>
+  <input id="image" placeholder="Image Name"><br><br>
+  <input id="rating" placeholder="Rating"><br><br>
+  <input id="verdict" placeholder="Verdict"><br><br>
+
+  <button onclick="generate()">Generate Entry</button>
+
+  <pre id="output"></pre>
+
+</div>
+
+<script>
+function login() {
+  if(document.getElementById('pass').value === "CV_Master_Admin_2026") {
+    document.getElementById('panel').style.display = "block";
+  }
+}
+
+function generate() {
+  const entry = {
+    title: title.value,
+    image: image.value,
+    rating: rating.value,
+    verdict: verdict.value
+  };
+
+  output.textContent = JSON.stringify(entry, null, 2);
+}
+</script>
+
+</body>
+</html>

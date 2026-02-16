@@ -1,302 +1,206 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Cinema Verdict</title>
+  <meta charset="UTF-8">
+  <title>Cinema Verdict</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="favicon_32.png">
 
-    <style>
+  <style>
 
-        body {
-            margin: 0;
-            background: #0F0F0F;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
+    body {
+      margin: 0;
+      background: #0F0F0F;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
 
-        /* HEADER */
+    /* HEADER */
 
-        .header {
-            position: sticky;
-            top: 0;
-            background: rgba(15,15,15,0.95);
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            border-bottom: 1px solid #222;
-        }
+    .header {
+      position: sticky;
+      top: 0;
+      background: rgba(15,15,15,0.95);
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #222;
+      z-index: 999;
+    }
 
-        .logo {
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-        }
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
 
-        .nav {
-            display: flex;
-            gap: 20px;
-            font-size: 14px;
-            color: #AAA;
-        }
+    .tagline {
+      font-size: 12px;
+      color: #E50914;
+    }
 
-        .nav div {
-            cursor: pointer;
-        }
+    .menu a {
+      color: white;
+      text-decoration: none;
+      margin-left: 25px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
 
-        .nav div:hover {
-            color: white;
-        }
+    .menu a:hover {
+      opacity: 1;
+    }
 
-        /* HERO */
+    /* HERO */
 
-        .hero {
-            padding: 50px 25px;
-        }
+    .hero {
+      text-align: center;
+      padding: 60px 20px 30px;
+    }
 
-        .hero-title {
-            font-size: 42px;
-            margin: 0;
-        }
+    .hero h1 {
+      margin: 0;
+      font-size: 42px;
+    }
 
-        .hero-tagline {
-            color: #E50914;
-            margin-top: 10px;
-        }
+    .hero p {
+      color: #999;
+      margin-top: 10px;
+    }
 
-        /* SECTION */
+    /* SECTION */
 
-        .section {
-            padding: 20px 25px;
-        }
+    .section {
+      padding: 20px 40px 60px;
+    }
 
-        .section-title {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
+    .section h2 {
+      font-size: 22px;
+      margin-bottom: 25px;
+    }
 
-        .poster-row {
-            display: flex;
-            gap: 15px;
-            overflow-x: auto;
-        }
+    /* MOVIE ROW */
 
-        /* MOVIE CARD */
+    .movie-row {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+    }
 
-        .movie-card {
-            min-width: 180px;
-            background: #181818;
-            padding: 10px;
-            border-radius: 12px;
-            transition: 0.35s;
-            cursor: pointer;
-            transform: scale(1);
-            position: relative;
-        }
+    /* CARD */
 
-        .movie-card:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 25px rgba(229,9,20,0.6);
-        }
+    .card {
+      min-width: 180px;
+      background: #181818;
+      border-radius: 12px;
+      padding: 10px;
+      transition: 0.3s;
+    }
 
-        .movie-card img {
-            width: 100%;
-            border-radius: 10px;
-        }
+    .card:hover {
+      transform: scale(1.05);
+    }
 
-        .movie-title {
-            margin: 10px 0 0 0;
-            font-size: 14px;
-        }
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+    }
 
-        /* RATING BADGE */
+    .movie-title {
+      margin-top: 10px;
+      font-size: 14px;
+    }
 
-        .rating {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #E50914;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
+    .buttons {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #aaa;
+    }
 
-        /* BUTTONS */
+    .buttons span {
+      margin-right: 10px;
+      cursor: pointer;
+    }
 
-        .buttons {
-            margin-top: 10px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+    /* FOOTER */
 
-        .btn {
-            background: #222;
-            border: none;
-            color: white;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-        }
+    .footer {
+      text-align: center;
+      padding: 30px;
+      border-top: 1px solid #222;
+      color: #666;
+      font-size: 12px;
+    }
 
-        .btn:hover {
-            background: #E50914;
-        }
-
-        /* COMMENT SECTION */
-
-        .comment-box {
-            margin-top: 30px;
-            background: #181818;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .comment-title {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .comment-input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: none;
-            margin-bottom: 10px;
-        }
-
-        .footer {
-            margin-top: 40px;
-            padding: 25px;
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* RESPONSIVE */
-
-        @media (max-width: 768px) {
-
-            .hero-title {
-                font-size: 28px;
-            }
-
-            .movie-card {
-                min-width: 140px;
-            }
-
-        }
-
-    </style>
-
+  </style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
+  <!-- HEADER -->
 
-    <div class="header">
-
-        <div class="logo">Cinema Verdict 👑</div>
-
-        <div class="nav">
-            <div>Home</div>
-            <div>Reviews</div>
-            <div>Trending</div>
-            <div>OTT</div>
-            <div>About</div>
-        </div>
-
+  <div class="header">
+    <div>
+      <div class="logo">Cinema Verdict 👑</div>
+      <div class="tagline">Cinema Beyond Reviews.</div>
     </div>
 
-    <!-- HERO -->
+    <div class="menu">
+      <a href="#">Home</a>
+      <a href="#">Reviews</a>
+      <a href="#">Trending</a>
+      <a href="#">OTT</a>
+      <a href="#">About</a>
+    </div>
+  </div>
 
-    <div class="hero" style="
-    text-align:center;
-    padding:60px 20px;
-    background: radial-gradient(circle at center, #1a1a1a 0%, #0F0F0F 60%);
-">
+  <!-- HERO -->
 
-    <h1 class="hero-title" style="
-        font-size:46px;
-        margin:0;
-    ">
-        Cinema Verdict
-    </h1>
+  <div class="hero">
+    <h1>Cinema Verdict</h1>
+    <p>Cinematic Intelligence Platform</p>
+  </div>
 
-    <p class="hero-tagline" style="
-        font-size:16px;
-    ">
-        Cinema Beyond Reviews
-    </p>
+  <!-- TRENDING -->
 
-</div>
+  <div class="section">
+    <h2>🔥 Trending Now</h2>
 
-    <!-- TRENDING -->
+    <div class="movie-row">
 
-    <div class="section">
+      <!-- SAIRAT -->
 
-        <div class="section-title">🔥 Trending Now</div>
-
-        <div class="poster-row">
-
-            <div class="movie-card">
-
-                <span class="rating">⭐ 9.2</span>
-
-                <img src="Sairat_Marathi_Film_Poster.jpg">
-
-                <p class="movie-title">Sairat 👑</p>
-
-                <div class="buttons">
-                    <button class="btn">🎬 Review</button>
-                    <button class="btn">🎥 Trailer</button>
-                    <button class="btn">📺 OTT</button>
-                </div>
-
-            </div>
-
-            <div class="movie-card">
-
-                <span class="rating">⭐ 8.8</span>
-
-                <img src="poster2.jpg">
-
-                <p class="movie-title">Next Movie 🔥</p>
-
-                <div class="buttons">
-                    <button class="btn">🎬 Review</button>
-                    <button class="btn">🎥 Trailer</button>
-                    <button class="btn">📺 OTT</button>
-                </div>
-
-            </div>
-
+      <div class="card">
+        <img src="Sairat_Marathi_Film_Poster.jpg">
+        <div class="movie-title">Sairat 👑</div>
+        <div class="buttons">
+          <span>🎬 Review</span>
+          <span>▶ Trailer</span>
+          <span>📺 OTT</span>
         </div>
+      </div>
 
-        <!-- COMMENT UI -->
+      <!-- LAGAAN -->
 
-        <div class="comment-box">
-
-            <div class="comment-title">💬 Audience Verdict</div>
-
-            <input class="comment-input" placeholder="Write your opinion...">
-
-            <button class="btn">Post Comment</button>
-
+      <div class="card">
+        <img src="lagaan.jpg">
+        <div class="movie-title">Lagaan 👑</div>
+        <div class="buttons">
+          <span>🎬 Review</span>
+          <span>▶ Trailer</span>
+          <span>📺 OTT</span>
         </div>
+      </div>
 
     </div>
+  </div>
 
-    <!-- FOOTER -->
+  <!-- FOOTER -->
 
-    <div class="footer">
-        © Cinema Verdict • Global Film Intelligence Platform
-    </div>
+  <div class="footer">
+    © Cinema Verdict • Global Entertainment Authority
+  </div>
 
 </body>
-
 </html>

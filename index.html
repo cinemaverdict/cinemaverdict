@@ -245,50 +245,35 @@ fetch('reviews.json')
 
 function renderFilms(data){
 
+    const grid=document.getElementById("grid");
+
     grid.innerHTML=data.map(film=>`
 
         <div class="card">
-            <img src="${film.poster}" onclick="openOverlay(
-                '${film.movie}',
-                '${film.poster}',
-                '${film.rating}',
-                '${film.verdict}',
-                '${film.review}'
-            )">
+            <img src="${film.poster}">
             <div class="cardTitle">${film.movie}</div>
         </div>
 
     `).join("");
 }
 
-/* SEARCH */
+/* ADVANCED SEARCH */
 
-search.addEventListener("input",()=>{
+document.getElementById("search").addEventListener("input",()=>{
 
-    const value=search.value.toLowerCase();
+    const value=document.getElementById("search").value.toLowerCase();
 
     const filtered=films.filter(film=>
-        film.movie.toLowerCase().includes(value)
+
+        film.movie.toLowerCase().includes(value) ||
+        film.rating.toLowerCase().includes(value) ||
+        film.verdict.toLowerCase().includes(value) ||
+        (film.platform && film.platform.toLowerCase().includes(value))
+
     );
 
     renderFilms(filtered);
 });
-
-/* OVERLAY */
-
-function openOverlay(title, poster, rating, verdict, review){
-
-    overlayTitle.innerText=title;
-    overlayPoster.src=poster;
-    overlayMeta.innerText=rating + " • " + verdict;
-    overlayReview.innerText=review;
-
-    filmOverlay.style.display="flex";
-}
-
-function closeOverlay(){
-    filmOverlay.style.display="none";
-}
 
 </script>
 

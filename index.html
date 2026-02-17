@@ -28,20 +28,16 @@ header{
     padding:15px 40px;
     background:linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
     z-index:1000;
-    box-sizing:border-box; /* ✅ FIX */
 }
 
 .logo{
     font-size:22px;
     font-weight:600;
-    white-space:nowrap; /* ✅ FIX */
 }
 
 nav{
     display:flex;
     gap:25px;
-    flex-wrap:wrap; /* ✅ FIX */
-    justify-content:flex-end;
 }
 
 nav a{
@@ -49,7 +45,6 @@ nav a{
     color:white;
     opacity:0.7;
     font-size:14px;
-    white-space:nowrap; /* ✅ FIX */
 }
 
 nav a:hover{
@@ -130,7 +125,6 @@ input, select{
     height:260px;
     object-fit:cover;
     border-radius:6px;
-    background:#111; /* ✅ FIX (prevents blank flash) */
 }
 
 /* OVERLAY */
@@ -193,7 +187,7 @@ input, select{
 <a href="film.html">Films</a>
 <a href="trending.html">Trending</a>
 <a href="ott.html">OTT</a>
-<a href="profile.html">👤 Profile</a> <!-- ✅ FIX -->
+<a href="profile.html">Profile</a>
 </nav>
 </header>
 
@@ -222,15 +216,29 @@ input, select{
 <option value="Worth Watching">👍 Worth Watching</option>
 </select>
 
+<!-- 🌍 LANGUAGE SYSTEM -->
+
 <select id="languageSwitcher">
 <option value="English">🌍 English</option>
 <option value="मराठी">🇮🇳 मराठी</option>
 <option value="Hindi">🇮🇳 Hindi</option>
+<option value="Gujarati">🇮🇳 Gujarati</option>
+<option value="Tamil">🇮🇳 Tamil</option>
+<option value="Telugu">🇮🇳 Telugu</option>
+<option value="Kannada">🇮🇳 Kannada</option>
+<option value="Malayalam">🇮🇳 Malayalam</option>
+<option value="Bengali">🇮🇳 Bengali</option>
+<option value="Punjabi">🇮🇳 Punjabi</option>
+
 <option value="Spanish">🌎 Spanish</option>
 <option value="French">🌎 French</option>
 <option value="German">🌎 German</option>
+<option value="Portuguese">🌎 Portuguese</option>
 <option value="Chinese">🌎 Chinese</option>
 <option value="Japanese">🌎 Japanese</option>
+<option value="Korean">🌎 Korean</option>
+<option value="Arabic">🌎 Arabic</option>
+<option value="Russian">🌎 Russian</option>
 </select>
 
 </div>
@@ -265,10 +273,11 @@ input, select{
 
 let films=[];
 let currentLanguage="English";
+let filteredFilms=[];
 
-/* ✅ CACHE SAFE FETCH */
+/* LOAD DATA */
 
-fetch('reviews.json?' + Date.now())
+fetch('reviews.json')
 .then(res=>res.json())
 .then(data=>{
     films=data;
@@ -281,14 +290,11 @@ function renderFilms(data){
 
     const grid=document.getElementById("grid");
 
-    if(!data.length){
-        grid.innerHTML="<p style='opacity:0.6'>No films found.</p>";
-        return;
-    }
+    filteredFilms=data;
 
-    grid.innerHTML=data.map((film,index)=>`
+    grid.innerHTML=data.map((film)=>`
 
-        <div class="card" onclick="openOverlay(${index})">
+        <div class="card" onclick="openOverlay('${film.movie}')">
             <img src="${film.poster}" 
             onerror="this.src='https://via.placeholder.com/300x450?text=No+Poster'">
         </div>
@@ -319,38 +325,38 @@ function applyFilters(){
 
 /* EVENTS */
 
-search.addEventListener("input",applyFilters);
-ratingFilter.addEventListener("change",applyFilters);
-verdictFilter.addEventListener("change",applyFilters);
+document.getElementById("search").addEventListener("input",applyFilters);
+document.getElementById("ratingFilter").addEventListener("change",applyFilters);
+document.getElementById("verdictFilter").addEventListener("change",applyFilters);
 
-/* LANGUAGE */
+/* 🌍 LANGUAGE SWITCH */
 
-languageSwitcher.addEventListener("change",(e)=>{
+document.getElementById("languageSwitcher").addEventListener("change",(e)=>{
     currentLanguage=e.target.value;
 });
 
-/* OVERLAY */
+/* 🎬 OVERLAY (BUG-FREE 😈) */
 
-function openOverlay(index){
+function openOverlay(movieName){
 
-    const film=films[index];
+    const film=films.find(f=>f.movie===movieName);
 
-    overlay.style.display="flex";
-    overlayPoster.src=film.poster;
-    overlayTitle.innerText=film.movie;
-    overlayMeta.innerText=${film.rating} • ${film.verdict};
+    document.getElementById("overlay").style.display="flex";
+    document.getElementById("overlayPoster").src=film.poster;
+    document.getElementById("overlayTitle").innerText=film.movie;
+    document.getElementById("overlayMeta").innerText=${film.rating} • ${film.verdict};
 
     const reviewText=film.details?.[currentLanguage] 
         || film.details?.["English"] 
         || "Review not available.";
 
-    overlayReview.innerText=reviewText;
+    document.getElementById("overlayReview").innerText=reviewText;
 }
 
 /* CLOSE */
 
 function closeOverlay(){
-    overlay.style.display="none";
+    document.getElementById("overlay").style.display="none";
 }
 
 </script>

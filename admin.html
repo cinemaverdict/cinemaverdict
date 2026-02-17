@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cinema Verdict – Studio Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:black;
+    color:white;
+}
+
+/* HEADER */
+
+.header{
+    text-align:center;
+    padding:20px;
+    font-size:28px;
+    font-weight:bold;
+    letter-spacing:2px;
+    border-bottom:1px solid #222;
+}
+
+/* PANEL */
+
+.panel{
+    max-width:1100px;
+    margin:auto;
+    padding:30px;
+}
+
+/* FORM */
+
+input, textarea, select{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    margin-bottom:18px;
+    background:#111;
+    border:1px solid #222;
+    color:white;
+    border-radius:6px;
+}
+
+textarea{
+    resize:vertical;
+    min-height:120px;
+}
+
+/* BUTTONS */
+
+button{
+    padding:12px 20px;
+    background:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+    margin-right:10px;
+}
+
+button:hover{
+    background:#ccc;
+}
+
+/* FILM LIST */
+
+.film-list{
+    margin-top:40px;
+}
+
+.film-card{
+    background:#0b0b0b;
+    border:1px solid #222;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.film-title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.actions{
+    margin-top:15px;
+}
+
+.delete-btn{
+    background:red;
+    color:white;
+}
+
+.delete-btn:hover{
+    background:#cc0000;
+}
+
+.edit-btn{
+    background:#444;
+    color:white;
+}
+
+.edit-btn:hover{
+    background:#666;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+🎬 CINEMA VERDICT STUDIO PANEL 😈
+</div>
+
+<div class="panel">
+
+<h2>Add / Edit Film</h2>
+
+<input type="text" id="movie" placeholder="Movie Name">
+<input type="text" id="poster" placeholder="Poster Image URL">
+<select id="rating">
+    <option>⭐ 5/5</option>
+    <option>⭐ 4/5</option>
+    <option>⭐ 3/5</option>
+    <option>⭐ 2/5</option>
+    <option>⭐ 1/5</option>
+</select>
+
+<select id="verdict">
+    <option>🔥 Must Watch</option>
+    <option>👑 Highly Recommended</option>
+    <option>👍 Worth Watching</option>
+    <option>👌 One Time Watch</option>
+    <option>❌ Skip</option>
+</select>
+
+<textarea id="review" placeholder="Review"></textarea>
+<input type="text" id="link" placeholder="External Link">
+
+<button onclick="saveFilm()">💾 Save Film</button>
+<button onclick="clearForm()">🧹 Clear</button>
+
+<div class="film-list" id="filmList"></div>
+
+</div>
+
+<script>
+
+let films = JSON.parse(localStorage.getItem("cv_films")) || [];
+let editIndex = null;
+
+function renderFilms(){
+
+    const list = document.getElementById("filmList");
+    list.innerHTML = "";
+
+    films.forEach((film, index)=>{
+
+        list.innerHTML += `
+            <div class="film-card">
+                <div class="film-title">${film.movie}</div>
+                <div>${film.rating} | ${film.verdict}</div>
+
+                <div class="actions">
+                    <button class="edit-btn" onclick="editFilm(${index})">✏ Edit</button>
+                    <button class="delete-btn" onclick="deleteFilm(${index})">🗑 Delete</button>
+                </div>
+            </div>
+        `;
+    });
+
+    localStorage.setItem("cv_films", JSON.stringify(films));
+}
+
+function saveFilm(){
+
+    const film = {
+        movie: document.getElementById("movie").value,
+        poster: document.getElementById("poster").value,
+        rating: document.getElementById("rating").value,
+        verdict: document.getElementById("verdict").value,
+        review: document.getElementById("review").value,
+        link: document.getElementById("link").value
+    };
+
+    if(!film.movie){
+        alert("Movie name required");
+        return;
+    }
+
+    if(editIndex === null){
+        films.push(film);
+    }else{
+        films[editIndex] = film;
+        editIndex = null;
+    }
+
+    clearForm();
+    renderFilms();
+}
+
+function editFilm(index){
+
+    const film = films[index];
+
+    document.getElementById("movie").value = film.movie;
+    document.getElementById("poster").value = film.poster;
+    document.getElementById("rating").value = film.rating;
+    document.getElementById("verdict").value = film.verdict;
+    document.getElementById("review").value = film.review;
+    document.getElementById("link").value = film.link;
+
+    editIndex = index;
+}
+
+function deleteFilm(index){
+
+    if(confirm("Delete this film?")){
+        films.splice(index, 1);
+        renderFilms();
+    }
+}
+
+function clearForm(){
+
+    document.getElementById("movie").value = "";
+    document.getElementById("poster").value = "";
+    document.getElementById("review").value = "";
+    document.getElementById("link").value = "";
+    editIndex = null;
+}
+
+renderFilms();
+
+</script>
+
+</body>
+</html>

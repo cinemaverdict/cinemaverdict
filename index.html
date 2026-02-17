@@ -250,14 +250,14 @@ function renderFilms(data){
     grid.innerHTML=data.map(film=>`
 
         <div class="card">
-            <img src="${film.poster}">
+            <img src="${film.poster}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
             <div class="cardTitle">${film.movie}</div>
         </div>
 
     `).join("");
 }
 
-/* ADVANCED SEARCH */
+/* SEARCH */
 
 document.getElementById("search").addEventListener("input",()=>{
 

@@ -132,6 +132,49 @@ input{
     opacity:0.8;
 }
 
+/* OVERLAY */
+
+.overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.85);
+    backdrop-filter:blur(10px);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.overlay-content{
+    background:linear-gradient(145deg,#111,#000);
+    width:85%;
+    max-width:900px;
+    border-radius:18px;
+    padding:30px;
+    display:flex;
+    gap:30px;
+}
+
+.overlay-poster{
+    width:280px;
+    border-radius:12px;
+}
+
+.overlay-info h2{
+    margin:0;
+}
+
+.close-btn{
+    position:absolute;
+    top:25px;
+    right:40px;
+    font-size:20px;
+    cursor:pointer;
+}
+
 </style>
 </head>
 
@@ -171,6 +214,24 @@ input{
 <div class="grid" id="grid"></div>
 </div>
 
+<!-- FILM OVERLAY -->
+
+<div id="filmOverlay" class="overlay">
+
+    <span class="close-btn" onclick="closeOverlay()">✖</span>
+
+    <div class="overlay-content">
+        <img id="overlayPoster" class="overlay-poster">
+
+        <div class="overlay-info">
+            <h2 id="overlayTitle"></h2>
+            <div id="overlayMeta"></div>
+            <p id="overlayReview"></p>
+        </div>
+    </div>
+
+</div>
+
 <script>
 
 let films=[];
@@ -187,7 +248,13 @@ function renderFilms(data){
     grid.innerHTML=data.map(film=>`
 
         <div class="card">
-            <img src="${film.poster}">
+            <img src="${film.poster}" onclick="openOverlay(
+                '${film.movie}',
+                '${film.poster}',
+                '${film.rating}',
+                '${film.verdict}',
+                '${film.review}'
+            )">
             <div class="cardTitle">${film.movie}</div>
         </div>
 
@@ -206,6 +273,22 @@ search.addEventListener("input",()=>{
 
     renderFilms(filtered);
 });
+
+/* OVERLAY */
+
+function openOverlay(title, poster, rating, verdict, review){
+
+    overlayTitle.innerText=title;
+    overlayPoster.src=poster;
+    overlayMeta.innerText=rating + " • " + verdict;
+    overlayReview.innerText=review;
+
+    filmOverlay.style.display="flex";
+}
+
+function closeOverlay(){
+    filmOverlay.style.display="none";
+}
 
 </script>
 

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Film View</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f0f0f;
+    color: white;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+.poster {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 12px;
+}
+
+.layout {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.meta {
+    opacity: 0.7;
+    margin: 10px 0;
+}
+
+.review {
+    margin-top: 20px;
+    line-height: 1.6;
+    opacity: 0.85;
+}
+
+.button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 20px;
+    border-radius: 30px;
+    background: white;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back {
+    opacity: 0.5;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="back" onclick="goBack()">← Back</div>
+
+<div class="layout">
+    <img id="poster" class="poster">
+    
+    <div>
+        <h1 id="title"></h1>
+        <div id="meta" class="meta"></div>
+        <div id="review" class="review"></div>
+        <a id="linkBtn" class="button" target="_blank">View More</a>
+    </div>
+</div>
+
+</div>
+
+<script>
+const CSV_URL = "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/refs/heads/main/Cinema%20Verdict%20Studio%2030a48756048f803eb140c9610ede1542.csv";
+
+const params = new URLSearchParams(window.location.search);
+const movieName = params.get("movie");
+
+fetch(CSV_URL)
+.then(res => res.text())
+.then(csv => {
+    const rows = csv.split("\n").slice(1);
+
+    rows.forEach(row => {
+        const cols = row.match(/(".?"|[^",\s]+)(?=\s,|\s*$)/g);
+        if (!cols) return;
+
+        const movie = clean(cols[0]);
+
+        if (movie === movieName) {
+            document.getElementById("title").innerText = movie;
+            document.getElementById("poster").src = clean(cols[1]);
+            document.getElementById("meta").innerText = clean(cols[2]) + " • " + clean(cols[3]);
+            document.getElementById("review").innerText = clean(cols[4]);
+            document.getElementById("linkBtn").href = clean(cols[5]) || "#";
+        }
+    });
+});
+
+function clean(text) {
+    return text ? text.replace(/"/g, '') : '';
+}
+
+function goBack() {
+    window.history.back();
+}
+</script>
+
+</body>
+</html>

@@ -16,18 +16,19 @@ body{
     color:white;
 }
 
-/* HEADER */
+/* HEADER (FIXED + STABLE) */
 
 header{
     position:fixed;
     top:0;
-    width:100%;
+    left:0;
+    right:0;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:15px 40px;
-    background:linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
-    z-index:1000;
+    padding:15px 50px;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.4));
+    z-index:9999;
 }
 
 .logo{
@@ -36,25 +37,30 @@ header{
     letter-spacing:1px;
 }
 
+/* NAV FIX */
+
 nav{
     display:flex;
-    gap:25px;
+    gap:28px;
+    flex-shrink:0;
 }
 
 nav a{
     text-decoration:none;
     color:white;
-    opacity:0.7;
+    opacity:0.75;
     font-size:14px;
+    white-space:nowrap;
 }
 
 nav a:hover{
     opacity:1;
 }
 
-/* HERO */
+/* HERO FIX */
 
 .hero{
+    margin-top:70px;   /* 🔥 HEADER OVERLAP FIX */
     height:70vh;
     background:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba') center/cover;
     display:flex;
@@ -126,12 +132,6 @@ input{
     border-radius:6px;
 }
 
-.cardTitle{
-    font-size:13px;
-    margin-top:6px;
-    opacity:0.8;
-}
-
 /* OVERLAY */
 
 .overlay{
@@ -145,7 +145,7 @@ input{
     display:none;
     justify-content:center;
     align-items:center;
-    z-index:9999;
+    z-index:99999;
 }
 
 .overlay-content{
@@ -210,7 +210,6 @@ input{
 
 <div class="section">
 <div class="sectionTitle">🔥 Featured Reviews</div>
-
 <div class="grid" id="grid"></div>
 </div>
 
@@ -251,7 +250,7 @@ function renderFilms(data){
 
         <div class="card">
            <img src="${film.poster}" 
-     onerror="this.src='https://via.placeholder.com/300x450?text=No+Poster'">
+           onerror="this.src='https://via.placeholder.com/300x450?text=No+Poster'">
         </div>
 
     `).join("");

@@ -1,362 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Cinema Verdict</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Cinema Verdict</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: black;
+            color: white;
+        }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: black;
-    color: white;
-}
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: rgba(0,0,0,0.9);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-/* LOGIN */
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
 
-#loginScreen {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 15px;
-}
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+        }
 
-input {
-    padding: 10px;
-    border-radius: 6px;
-    border: none;
-    width: 220px;
-}
+        .controls {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-/* HEADER */
+        input, select {
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+        }
 
-.header {
-    padding: 15px;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
 
-/* NAV */
+        .card {
+            background: #111;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
 
-.nav {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
+        .card:hover {
+            transform: scale(1.03);
+        }
 
-.nav button {
-    background: transparent;
-    color: white;
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 6px 14px;
-    border-radius: 20px;
-    cursor: pointer;
-}
+        .poster {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: #222;
+        }
 
-/* SEARCH */
+        .info {
+            padding: 10px;
+        }
 
-.searchBar {
-    text-align: center;
-    padding: 15px;
-}
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+        }
 
-.searchBar input {
-    width: 260px;
-}
-
-/* GRID */
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-    padding: 20px;
-}
-
-.card {
-    background: rgba(255,255,255,0.05);
-    padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.card:hover {
-    background: rgba(255,255,255,0.12);
-}
-
-.card img {
-    width: 100%;
-    border-radius: 6px;
-}
-
-/* FILM VIEW */
-
-#filmView {
-    display: none;
-    padding: 20px;
-}
-
-/* ADMIN */
-
-#adminPanel {
-    display: none;
-    padding: 20px;
-}
-
-textarea {
-    width: 100%;
-    height: 120px;
-}
-
-.button {
-    padding: 8px 16px;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-}
-
-.primary { background: white; color: black; }
-
-</style>
+        .meta {
+            font-size: 13px;
+            opacity: 0.7;
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<header>
+    <div class="logo">🎬 Cinema Verdict</div>
 
-<div id="loginScreen">
-    <h2>🔐 Cinema Verdict</h2>
-    <input id="password" type="password" placeholder="Enter Password">
-    <button class="button primary" onclick="login()">Enter</button>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Films</a>
+        <a href="#">Trending</a>
+        <a href="#">OTT</a>
+    </nav>
+</header>
+
+<div class="controls">
+    <input type="text" id="search" placeholder="🔍 Search Film...">
+
+    <select id="ratingFilter">
+        <option value="">⭐ All Ratings</option>
+        <option value="⭐ 5/5">⭐ 5/5</option>
+        <option value="⭐ 4/5">⭐ 4/5</option>
+        <option value="⭐ 3/5">⭐ 3/5</option>
+    </select>
+
+    <select id="verdictFilter">
+        <option value="">🏆 All Verdicts</option>
+        <option value="🔥 Must Watch">🔥 Must Watch</option>
+        <option value="👑 Highly Recommended">👑 Highly Recommended</option>
+        <option value="👍 Worth Watching">👍 Worth Watching</option>
+    </select>
+
+    <select id="language">
+        <option>🌐 Language</option>
+        <option>English</option>
+        <option>मराठी</option>
+        <option>हिन्दी</option>
+    </select>
 </div>
 
-<!-- MAIN SYSTEM -->
-
-<div id="mainSystem" style="display:none">
-
-    <div class="header">🎬 Cinema Verdict</div>
-
-    <div class="nav">
-        <button onclick="showHome()">Home</button>
-        <button onclick="showWatchlist()">Watchlist 💾</button>
-        <button onclick="showAdmin()">Admin 😈</button>
-        <button onclick="logout()">Logout</button>
-    </div>
-
-    <div class="searchBar">
-        <input id="searchInput" placeholder="Search Film…" oninput="renderMovies()">
-    </div>
-
-    <div id="homeView" class="grid"></div>
-
-    <!-- FILM VIEW -->
-
-    <div id="filmView">
-        <button onclick="showHome()">← Back</button>
-        <h2 id="filmTitle"></h2>
-        <img id="filmPoster" width="240">
-        <p id="filmRating"></p>
-        <p id="filmVerdict"></p>
-        <p id="filmReview"></p>
-        <button onclick="toggleWatchlist()">💾 Watchlist</button>
-    </div>
-
-    <!-- WATCHLIST -->
-
-    <div id="watchlistView" class="grid" style="display:none"></div>
-
-    <!-- ADMIN -->
-
-    <div id="adminPanel">
-        <h3>😈 Admin Panel</h3>
-        <input id="movieName" placeholder="Movie Name"><br><br>
-        <input id="moviePoster" placeholder="Poster URL"><br><br>
-        <input id="movieRating" placeholder="Rating"><br><br>
-        <input id="movieVerdict" placeholder="Verdict"><br><br>
-        <textarea id="movieReview" placeholder="Review"></textarea><br><br>
-        <button class="button primary" onclick="addMovie()">Add Film</button>
-    </div>
-
-</div>
+<div class="grid" id="filmsGrid"></div>
 
 <script>
 
-/* CONFIG */
-
-const ADMIN_PASSWORD = "CV_Master_Admin_2026";
-
-/* CSV SOURCE */
-
 const CSV_URL = "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/refs/heads/main/Cinema%20Verdict%20Studio%2030a48756048f803eb140c9610ede1542.csv";
 
-/* DATA */
+let films = [];
 
-let movies = [];
+async function loadFilms() {
+    const res = await fetch(CSV_URL);
+    const text = await res.text();
 
-/* FETCH CSV */
+    const rows = text.split("\n").slice(1);
 
-fetch(CSV_URL)
-.then(res => res.text())
-.then(csv => {
+    films = rows.map(row => {
+        const cols = row.split(",");
 
-    const rows = csv.trim().split("\n").slice(1);
-
-    rows.forEach(row => {
-
-        const cols = row.match(/(".?"|[^",]+)(?=\s,|\s*$)/g);
-        if (!cols) return;
-
-        movies.push({
-            name: clean(cols[0]),
-            poster: clean(cols[1]),
-            rating: clean(cols[2]),
-            verdict: clean(cols[3]),
-            review: clean(cols[4])
-        });
-
+        return {
+            title: cols[0],
+            poster: cols[1] || "https://via.placeholder.com/300x400",
+            rating: cols[2],
+            verdict: cols[3],
+            review: cols[4],
+            link: cols[5]
+        };
     });
 
-});
-
-let currentFilm = null;
-
-/* LOGIN */
-
-function login() {
-    if (password.value === ADMIN_PASSWORD) {
-        loginScreen.style.display = "none";
-        mainSystem.style.display = "block";
-        renderMovies();
-    } else {
-        alert("Wrong Password ❌");
-    }
+    renderFilms(films);
 }
 
-function logout() { location.reload(); }
+function renderFilms(data) {
+    const grid = document.getElementById("filmsGrid");
 
-/* VIEW CONTROL */
-
-function showHome() {
-    hideAll();
-    homeView.style.display = "grid";
-    renderMovies();
+    grid.innerHTML = data.map(film => `
+        <div class="card">
+            <img class="poster" src="${film.poster}">
+            <div class="info">
+                <div class="title">${film.title}</div>
+                <div class="meta">${film.rating}</div>
+                <div class="meta">${film.verdict}</div>
+            </div>
+        </div>
+    `).join("");
 }
 
-function showFilm(movie) {
+function applyFilters() {
+    const search = document.getElementById("search").value.toLowerCase();
+    const rating = document.getElementById("ratingFilter").value;
+    const verdict = document.getElementById("verdictFilter").value;
 
-    hideAll();
-    currentFilm = movie;
-
-    filmView.style.display = "block";
-
-    filmTitle.innerText = movie.name;
-    filmPoster.src = movie.poster;
-    filmRating.innerText = movie.rating;
-    filmVerdict.innerText = movie.verdict;
-    filmReview.innerText = movie.review;
-}
-
-function showWatchlist() {
-
-    hideAll();
-    watchlistView.style.display = "grid";
-
-    const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
-
-    watchlistView.innerHTML = "";
-
-    movies.filter(m => watchlist.includes(m.name))
-          .forEach(m => createCard(m, watchlistView));
-}
-
-function showAdmin() {
-    hideAll();
-    adminPanel.style.display = "block";
-}
-
-function hideAll() {
-    homeView.style.display = "none";
-    filmView.style.display = "none";
-    watchlistView.style.display = "none";
-    adminPanel.style.display = "none";
-}
-
-/* RENDER */
-
-function renderMovies() {
-
-    const search = searchInput.value.toLowerCase();
-
-    homeView.innerHTML = "";
-
-    movies.filter(m => m.name.toLowerCase().includes(search))
-          .forEach(m => createCard(m, homeView));
-}
-
-function createCard(movie, container) {
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-        <img src="${movie.poster}">
-        <b>${movie.name}</b>
-        <div>${movie.rating}</div>
-    `;
-
-    card.onclick = () => showFilm(movie);
-
-    container.appendChild(card);
-}
-
-/* WATCHLIST */
-
-function toggleWatchlist() {
-
-    const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
-
-    if (watchlist.includes(currentFilm.name)) {
-        const updated = watchlist.filter(m => m !== currentFilm.name);
-        localStorage.setItem("watchlist", JSON.stringify(updated));
-    } else {
-        watchlist.push(currentFilm.name);
-        localStorage.setItem("watchlist", JSON.stringify(watchlist));
-    }
-
-    alert("Updated 💾");
-}
-
-/* ADMIN */
-
-function addMovie() {
-
-    movies.push({
-        name: movieName.value,
-        poster: moviePoster.value,
-        rating: movieRating.value,
-        verdict: movieVerdict.value,
-        review: movieReview.value
+    const filtered = films.filter(film => {
+        return (
+            film.title.toLowerCase().includes(search) &&
+            (rating === "" || film.rating === rating) &&
+            (verdict === "" || film.verdict === verdict)
+        );
     });
 
-    alert("Film Added (Local Session) ✅");
-
-    renderMovies();
+    renderFilms(filtered);
 }
 
-/* HELPERS */
+document.getElementById("search").addEventListener("input", applyFilters);
+document.getElementById("ratingFilter").addEventListener("change", applyFilters);
+document.getElementById("verdictFilter").addEventListener("change", applyFilters);
 
-function clean(text) {
-    return text ? text.replace(/"/g, '').trim() : '';
-}
+loadFilms();
 
 </script>
 

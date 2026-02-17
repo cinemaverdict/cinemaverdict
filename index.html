@@ -7,59 +7,116 @@
 
 <style>
 
+/* GLOBAL */
+
 body{
     margin:0;
-    font-family:Arial, sans-serif;
-    background:black;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background:#0b0b0b;
     color:white;
 }
 
 /* HEADER */
 
 header{
+    position:fixed;
+    top:0;
+    width:100%;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:15px 25px;
-    background:#050505;
-    position:sticky;
-    top:0;
+    padding:15px 40px;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+    z-index:1000;
 }
 
 .logo{
-    font-size:20px;
-    font-weight:bold;
+    font-size:22px;
+    font-weight:600;
+    letter-spacing:1px;
+}
+
+nav{
+    display:flex;
+    gap:25px;
+}
+
+nav a{
+    text-decoration:none;
+    color:white;
+    opacity:0.7;
+    font-size:14px;
+}
+
+nav a:hover{
+    opacity:1;
+}
+
+/* HERO */
+
+.hero{
+    height:70vh;
+    background:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba') center/cover;
+    display:flex;
+    align-items:flex-end;
+    padding:60px;
+}
+
+.heroContent{
+    max-width:500px;
+}
+
+.hero h1{
+    font-size:42px;
+    margin:0;
+}
+
+.hero p{
+    opacity:0.7;
+    line-height:1.5;
 }
 
 /* CONTROLS */
 
 .controls{
-    padding:15px;
+    margin-top:20px;
     display:flex;
     gap:10px;
-    flex-wrap:wrap;
-    justify-content:center;
 }
 
-input, select{
-    padding:10px;
-    border-radius:6px;
+input{
+    padding:10px 15px;
+    border-radius:4px;
     border:none;
+    width:250px;
+}
+
+/* SECTION */
+
+.section{
+    padding:30px 40px;
+}
+
+.sectionTitle{
+    font-size:18px;
+    margin-bottom:15px;
 }
 
 /* GRID */
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-    gap:20px;
-    padding:20px;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:15px;
 }
 
 .card{
-    background:#111;
-    border-radius:10px;
-    padding:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:scale(1.05);
 }
 
 .card img{
@@ -69,23 +126,10 @@ input, select{
     border-radius:6px;
 }
 
-/* LOGIN */
-
-#loginBox{
-    text-align:center;
-    padding:20px;
-}
-
-button{
-    padding:8px 16px;
-    border:none;
-    border-radius:20px;
-    cursor:pointer;
-}
-
-.primary{
-    background:white;
-    color:black;
+.cardTitle{
+    font-size:13px;
+    margin-top:6px;
+    opacity:0.8;
 }
 
 </style>
@@ -95,55 +139,36 @@ button{
 
 <header>
 <div class="logo">🎬 Cinema Verdict</div>
-<div id="userState">Guest</div>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="film.html">Films</a>
+<a href="trending.html">Trending</a>
+<a href="ott.html">OTT</a>
+<a href="profile.html">Profile</a>
+</nav>
 </header>
 
-<div id="loginBox">
-<input id="username" placeholder="Username">
-<button class="primary" onclick="login()">Login</button>
-<button onclick="logout()">Logout</button>
-</div>
+<!-- HERO -->
+
+<div class="hero">
+<div class="heroContent">
+<h1>Cinema Beyond Reviews.</h1>
+<p>Discover films through emotion, conflict, and cinematic impact.</p>
 
 <div class="controls">
-
-<input type="text" id="search" placeholder="🔍 Search Films...">
-
-<select id="ratingFilter">
-<option value="">⭐ All Ratings</option>
-<option value="⭐ 5/5">⭐ 5/5</option>
-<option value="⭐ 4/5">⭐ 4/5</option>
-<option value="⭐ 3/5">⭐ 3/5</option>
-</select>
-
-<select id="verdictFilter">
-<option value="">🏆 All Verdicts</option>
-<option value="🔥 Must Watch">🔥 Must Watch</option>
-<option value="👑 Highly Recommended">👑 Highly Recommended</option>
-</select>
-
-<select id="platformFilter">
-<option value="">📺 All Platforms</option>
-<option value="Netflix">Netflix</option>
-<option value="Amazon Prime">Amazon Prime</option>
-</select>
-
-<select id="languageFilter">
-<option value="">🌍 All Languages</option>
-<option value="English">English</option>
-<option value="मराठी">मराठी</option>
-</select>
-
+<input type="text" id="search" placeholder="Search Films...">
 </div>
 
+</div>
+</div>
+
+<!-- FILM SECTION -->
+
+<div class="section">
+<div class="sectionTitle">🔥 Featured Reviews</div>
+
 <div class="grid" id="grid"></div>
-
-<!-- SUBMISSION -->
-
-<div style="padding:20px;max-width:500px;margin:auto">
-<h3>😈 Submit Review</h3>
-<input id="subMovie" placeholder="Movie Name"><br><br>
-<textarea id="subReview" placeholder="Your Review"></textarea><br><br>
-<button class="primary" onclick="submitReview()">Submit</button>
 </div>
 
 <script>
@@ -154,7 +179,7 @@ fetch('reviews.json')
 .then(res=>res.json())
 .then(data=>{
     films=data;
-    renderFilms(films);
+    renderFilms(data);
 });
 
 function renderFilms(data){
@@ -163,91 +188,24 @@ function renderFilms(data){
 
         <div class="card">
             <img src="${film.poster}">
-            <b>${film.movie}</b>
-            <div>${film.rating}</div>
-            <div>${film.verdict}</div>
+            <div class="cardTitle">${film.movie}</div>
         </div>
 
     `).join("");
 }
 
-/* ADVANCED FILTER */
+/* SEARCH */
 
-function applyFilters(){
+search.addEventListener("input",()=>{
 
-    const search=searchInput();
-    const rating=ratingFilter.value;
-    const verdict=verdictFilter.value;
-    const platform=platformFilter.value;
-    const language=languageFilter.value;
+    const value=search.value.toLowerCase();
 
-    const filtered=films.filter(film=>{
-
-        const text=${film.movie} ${film.review}.toLowerCase();
-
-        return(
-            text.includes(search) &&
-            (rating===""||film.rating===rating) &&
-            (verdict===""||film.verdict===verdict) &&
-            (platform===""||(film.platforms||[]).includes(platform)) &&
-            (language===""||film.language===language)
-        );
-    });
+    const filtered=films.filter(film=>
+        film.movie.toLowerCase().includes(value)
+    );
 
     renderFilms(filtered);
-}
-
-function searchInput(){
-    return search.value.toLowerCase();
-}
-
-search.addEventListener("input",applyFilters);
-ratingFilter.addEventListener("change",applyFilters);
-verdictFilter.addEventListener("change",applyFilters);
-platformFilter.addEventListener("change",applyFilters);
-languageFilter.addEventListener("change",applyFilters);
-
-/* LOGIN */
-
-function login(){
-
-    const user=username.value;
-
-    if(!user){
-        alert("Enter username");
-        return;
-    }
-
-    localStorage.setItem("cv_user",user);
-    updateUserState();
-}
-
-function logout(){
-    localStorage.removeItem("cv_user");
-    updateUserState();
-}
-
-function updateUserState(){
-    const user=localStorage.getItem("cv_user")||"Guest";
-    userState.innerText=user;
-}
-
-updateUserState();
-
-/* SUBMISSION */
-
-function submitReview(){
-
-    const movie=subMovie.value;
-    const review=subReview.value;
-
-    if(!movie||!review){
-        alert("Fill fields");
-        return;
-    }
-
-    alert("Review Submitted 😈🔥");
-}
+});
 
 </script>
 

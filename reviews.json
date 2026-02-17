@@ -1,20 +1,26 @@
 [
   {
-    "title": "Sairat",
-    "image": "Sairat_Marathi_Film_Poster.jpg",
-    "rating": "5/5",
-    "verdict": "Must Watch"
+    "movie": "Sairat",
+    "poster": "Sairat_Marathi_Film_Poster.jpg",
+    "rating": "⭐ 5/5",
+    "verdict": "🔥 Must Watch"
   },
   {
-    "title": "Lagaan",
-    "image": "lagaan.jpg",
-    "rating": "5/5",
-    "verdict": "Highly Recommended"
+    "movie": "Lagaan",
+    "poster": "lagaan.jpg",
+    "rating": "⭐ 5/5",
+    "verdict": "👑 Highly Recommended"
   },
   {
-  "title": "titanic",
-  "image": "titanic.jpg",
-  "rating": "5/5",
-  "verdict": "must watch"
+    "movie": "Titanic",
+    "poster": "titanic.jpg",
+    "rating": "⭐ 5/5",
+    "verdict": "🔥 Must Watch"
+  },
+  {
+  "movie": "New Film",
+  "poster": "newfilm.jpg",
+  "rating": "⭐ 4/5",
+  "verdict": "👍 Worth Watching"
 }
 ]

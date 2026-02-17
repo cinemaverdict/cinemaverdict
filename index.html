@@ -1,127 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Cinema Verdict</title>
+    <meta charset="UTF-8">
+    <title>Cinema Verdict</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-    margin: 0;
-    background: black;
-    color: white;
-    font-family: Arial, sans-serif;
-}
+    <style>
+        /* GLOBAL */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f0f0f;
+            color: white;
+        }
 
-header {
-    text-align: center;
-    padding: 40px 20px;
-}
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-.logo {
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
+        /* HEADER */
+        .header {
+            position: sticky;
+            top: 0;
+            background: rgba(15,15,15,0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 40px;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
 
-.tagline {
-    opacity: 0.6;
-    margin-top: 10px;
-}
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
 
-.container {
-    padding: 40px;
-}
+        .logo span {
+            color: #f5c15d;
+        }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
-}
+        .nav {
+            display: flex;
+            gap: 28px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+        }
 
-.card {
-    background: #111;
-    border-radius: 12px;
-    padding: 15px;
-    transition: 0.3s;
-}
+        .nav a:hover {
+            color: white;
+        }
 
-.card:hover {
-    transform: scale(1.05);
-}
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 50px;
+        }
 
-.poster {
-    width: 100%;
-    border-radius: 10px;
-    height: 320px;
-    object-fit: cover;
-    background: #222;
-}
+        .hero h1 {
+            font-size: 38px;
+            margin: 0;
+            font-weight: bold;
+            text-shadow: 0 0 25px rgba(255,255,255,0.15);
+        }
 
-.title {
-    font-weight: bold;
-    margin-top: 10px;
-}
+        .hero p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+        }
 
-.meta {
-    opacity: 0.7;
-    font-size: 14px;
-    margin-top: 5px;
-}
+        /* SECTION */
+        .section {
+            padding: 30px 40px;
+        }
 
-.review {
-    opacity: 0.6;
-    font-size: 13px;
-    margin-top: 10px;
-}
-</style>
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        /* REVIEWS GRID */
+        .reviews {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: #181818;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .poster {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .movie-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .meta {
+            font-size: 12px;
+            color: rgba(255,255,255,0.65);
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .nav {
+                gap: 16px;
+                font-size: 12px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<header>
-    <div class="logo">Cinema Verdict</div>
-    <div class="tagline">Cinema Beyond Reviews.</div>
-</header>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo">
+            Cinema <span>Verdict</span>
+        </div>
 
-<div class="container">
-    <div class="grid" id="reviews"></div>
-</div>
+        <div class="nav">
+            <a href="#">Home</a>
+            <a href="#">Reviews</a>
+            <a href="#">Trending</a>
+            <a href="#">OTT</a>
+            <a href="#">About</a>
+        </div>
+    </div>
 
-<script>
-const CSV_URL = "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/refs/heads/main/Cinema%20Verdict%20Studio%2030a48756048f803eb140c9610ede1542.csv";
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Cinema Verdict</h1>
+        <p>Cinematic Intelligence Platform</p>
+    </div>
 
-fetch(CSV_URL)
-.then(res => res.text())
-.then(data => {
-    const rows = data.split("\n").slice(1);
-    const container = document.getElementById("reviews");
+    <!-- TRENDING -->
+    <div class="section">
+        <div class="section-title">🔥 Trending Now</div>
 
-    rows.forEach(row => {
-        const cols = row.split(",");
+        <div class="reviews">
 
-        if (!cols[0]) return;
+            <div class="card">
+                <img class="poster" src="Sairat_Marathi_Film_Poster.jpg">
+                <div class="card-content">
+                    <div class="movie-title">Sairat</div>
+                    <div class="meta">⭐ 5/5 • 🔥 Must Watch</div>
+                </div>
+            </div>
 
-        const title = cols[0];
-        const poster = cols[1];
-        const rating = cols[2];
-        const verdict = cols[3];
-        const review = cols[4];
-        const link = cols[5];
+            <div class="card">
+                <img class="poster" src="lagaan.jpg">
+                <div class="card-content">
+                    <div class="movie-title">Lagaan</div>
+                    <div class="meta">⭐ 5/5 • 👑 Highly Recommended</div>
+                </div>
+            </div>
 
-        const card = document.createElement("div");
-        card.className = "card";
+            <div class="card">
+                <img class="poster" src="titanic.jpg">
+                <div class="card-content">
+                    <div class="movie-title">Titanic</div>
+                    <div class="meta">⭐ 5/5 • 🔥 Must Watch</div>
+                </div>
+            </div>
 
-        card.innerHTML = `
-            <img class="poster" src="${poster || ''}">
-            <div class="title">${title}</div>
-            <div class="meta">${rating} • ${verdict}</div>
-            <div class="review">${review || ''}</div>
-        `;
+        </div>
+    </div>
 
-        container.appendChild(card);
-    });
-});
-</script>
+    <!-- FOOTER -->
+    <div class="footer">
+        © Cinema Verdict — Cinema Beyond Reviews.
+    </div>
 
 </body>
 </html>

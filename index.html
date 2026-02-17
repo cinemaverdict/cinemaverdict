@@ -1,213 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Cinema Verdict</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Cinema Verdict</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        /* GLOBAL */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f0f0f;
-            color: white;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f0f0f;
+    color: white;
+}
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+/* HEADER */
+.header {
+    text-align: center;
+    padding: 60px 20px 30px;
+}
 
-        /* HEADER */
-        .header {
-            position: sticky;
-            top: 0;
-            background: rgba(15,15,15,0.9);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 40px;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
+.logo {
+    font-size: 34px;
+    font-weight: bold;
+}
 
-        .logo {
-            font-size: 20px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-        }
+.tagline {
+    opacity: 0.6;
+    font-size: 14px;
+    margin-top: 8px;
+}
 
-        .logo span {
-            color: #f5c15d;
-        }
+/* SEARCH + FILTER */
+.controls {
+    text-align: center;
+    margin: 20px;
+}
 
-        .nav {
-            display: flex;
-            gap: 28px;
-            font-size: 14px;
-            color: rgba(255,255,255,0.7);
-        }
+input, select {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 20px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
 
-        .nav a:hover {
-            color: white;
-        }
+/* GRID */
+.reviews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 30px;
+}
 
-        /* HERO */
-        .hero {
-            text-align: center;
-            padding: 80px 20px 50px;
-        }
+.card {
+    background: #181818;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-        .hero h1 {
-            font-size: 38px;
-            margin: 0;
-            font-weight: bold;
-            text-shadow: 0 0 25px rgba(255,255,255,0.15);
-        }
+.card:hover {
+    transform: translateY(-6px);
+}
 
-        .hero p {
-            margin-top: 10px;
-            font-size: 14px;
-            color: rgba(255,255,255,0.6);
-        }
+.poster {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+}
 
-        /* SECTION */
-        .section {
-            padding: 30px 40px;
-        }
+.card-content {
+    padding: 10px;
+}
 
-        .section-title {
-            font-size: 18px;
-            margin-bottom: 25px;
-        }
+.movie-title {
+    font-size: 14px;
+    font-weight: bold;
+}
 
-        /* REVIEWS GRID */
-        .reviews {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 22px;
-        }
+.meta {
+    font-size: 12px;
+    opacity: 0.7;
+}
 
-        .card {
-            background: #181818;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.04);
-        }
+/* OVERLAY */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
 
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+.overlay-content {
+    background: #111;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    animation: scaleIn 0.3s ease;
+}
 
-        .poster {
-            width: 100%;
-            aspect-ratio: 2 / 3;
-            object-fit: cover;
-            display: block;
-        }
+.overlay img {
+    width: 100%;
+    border-radius: 10px;
+}
 
-        .card-content {
-            padding: 12px;
-        }
+.close-btn {
+    float: right;
+    cursor: pointer;
+    opacity: 0.6;
+}
 
-        .movie-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
+@keyframes fadeIn {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
 
-        .meta {
-            font-size: 12px;
-            color: rgba(255,255,255,0.65);
-        }
-
-        /* FOOTER */
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 12px;
-            color: rgba(255,255,255,0.4);
-        }
-
-        /* MOBILE */
-        @media (max-width: 768px) {
-            .header {
-                padding: 15px 20px;
-            }
-
-            .nav {
-                gap: 16px;
-                font-size: 12px;
-            }
-
-            .hero h1 {
-                font-size: 26px;
-            }
-
-            .section {
-                padding: 20px;
-            }
-        }
-    </style>
+@keyframes scaleIn {
+    from { transform: scale(0.9) }
+    to { transform: scale(1) }
+}
+</style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <div class="header">
-        <div class="logo">
-            Cinema <span>Verdict</span>
-        </div>
+<div class="header">
+    <div class="logo">Cinema Verdict</div>
+    <div class="tagline">Cinema Beyond Reviews.</div>
+</div>
 
-        <div class="nav">
-            <a href="#">Home</a>
-            <a href="#">Reviews</a>
-            <a href="#">Trending</a>
-            <a href="#">OTT</a>
-            <a href="#">About</a>
-        </div>
+<div class="controls">
+    <input type="text" id="searchInput" placeholder="Search movies..." />
+    
+    <select id="ratingFilter">
+        <option value="all">All Ratings</option>
+        <option value="5">⭐ 5</option>
+        <option value="4">⭐ 4</option>
+        <option value="3">⭐ 3</option>
+    </select>
+
+    <select id="verdictFilter">
+        <option value="all">All Verdicts</option>
+        <option value="Must Watch">🔥 Must Watch</option>
+        <option value="Highly Recommended">👑 Highly Recommended</option>
+    </select>
+</div>
+
+<div class="reviews" id="reviewsContainer"></div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay">
+    <div class="overlay-content">
+        <div class="close-btn" onclick="closeOverlay()">✖</div>
+        <img id="overlayPoster">
+        <h2 id="overlayTitle"></h2>
+        <div id="overlayMeta"></div>
+        <p id="overlayReview"></p>
     </div>
-
-    <!-- HERO -->
-    <div class="hero">
-        <h1>Cinema Verdict</h1>
-        <p>Cinematic Intelligence Platform</p>
-    </div>
-
-    <!-- TRENDING -->
-    <div class="section">
-    <div class="section-title">🔥 Trending Now</div>
-
-    <div class="reviews" id="reviewsContainer"></div>
 </div>
 
 <script>
-fetch('reviews.json')
-    .then(response => response.json())
-    .then(data => {
-        const container = document.getElementById('reviewsContainer');
+let moviesData = [];
 
-        data.forEach(movie => {
-            container.innerHTML += `
-                <div class="card">
-                    <img class="poster" src="${movie.poster}">
-                    <div class="card-content">
-                        <div class="movie-title">${movie.movie}</div>
-                        <div class="meta">${movie.rating} • ${movie.verdict}</div>
-                    </div>
+fetch('reviews.json')
+.then(res => res.json())
+.then(data => {
+    moviesData = data;
+    renderMovies(data);
+});
+
+function renderMovies(data) {
+    const container = document.getElementById("reviewsContainer");
+    container.innerHTML = "";
+
+    data.forEach(movie => {
+        container.innerHTML += `
+            <div class="card movie-card" onclick='openOverlay(${JSON.stringify(movie)})'>
+                <img class="poster" src="${movie.poster}">
+                <div class="card-content">
+                    <div class="movie-title">${movie.movie}</div>
+                    <div class="meta">${movie.rating} • ${movie.verdict}</div>
                 </div>
-            `;
-        });
+            </div>
+        `;
     });
+}
+
+document.getElementById("searchInput").addEventListener("keyup", filterMovies);
+document.getElementById("ratingFilter").addEventListener("change", filterMovies);
+document.getElementById("verdictFilter").addEventListener("change", filterMovies);
+
+function filterMovies() {
+    let search = searchInput.value.toLowerCase();
+    let rating = ratingFilter.value;
+    let verdict = verdictFilter.value;
+
+    let filtered = moviesData.filter(movie => {
+        return (
+            movie.movie.toLowerCase().includes(search) &&
+            (rating === "all" || movie.rating.includes(rating)) &&
+            (verdict === "all" || movie.verdict.includes(verdict))
+        );
+    });
+
+    renderMovies(filtered);
+}
+
+function openOverlay(movie) {
+    overlay.style.display = "flex";
+    overlayPoster.src = movie.poster;
+    overlayTitle.innerText = movie.movie;
+    overlayMeta.innerText = movie.rating + " • " + movie.verdict;
+    overlayReview.innerText = movie.review || "";
+}
+
+function closeOverlay() {
+    overlay.style.display = "none";
+}
 </script>
-    <!-- FOOTER -->
-    <div class="footer">
-        © Cinema Verdict — Cinema Beyond Reviews.
-    </div>
 
 </body>
 </html>

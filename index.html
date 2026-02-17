@@ -180,37 +180,30 @@
 
     <!-- TRENDING -->
     <div class="section">
-        <div class="section-title">🔥 Trending Now</div>
+    <div class="section-title">🔥 Trending Now</div>
 
-        <div class="reviews">
+    <div class="reviews" id="reviewsContainer"></div>
+</div>
 
-            <div class="card">
-                <img class="poster" src="Sairat_Marathi_Film_Poster.jpg">
-                <div class="card-content">
-                    <div class="movie-title">Sairat</div>
-                    <div class="meta">⭐ 5/5 • 🔥 Must Watch</div>
+<script>
+fetch('reviews.json')
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('reviewsContainer');
+
+        data.forEach(movie => {
+            container.innerHTML += `
+                <div class="card">
+                    <img class="poster" src="${movie.poster}">
+                    <div class="card-content">
+                        <div class="movie-title">${movie.movie}</div>
+                        <div class="meta">${movie.rating} • ${movie.verdict}</div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="card">
-                <img class="poster" src="lagaan.jpg">
-                <div class="card-content">
-                    <div class="movie-title">Lagaan</div>
-                    <div class="meta">⭐ 5/5 • 👑 Highly Recommended</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <img class="poster" src="titanic.jpg">
-                <div class="card-content">
-                    <div class="movie-title">Titanic</div>
-                    <div class="meta">⭐ 5/5 • 🔥 Must Watch</div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
+            `;
+        });
+    });
+</script>
     <!-- FOOTER -->
     <div class="footer">
         © Cinema Verdict — Cinema Beyond Reviews.

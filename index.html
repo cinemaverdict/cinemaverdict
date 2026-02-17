@@ -11,56 +11,49 @@
 
 body{
     margin:0;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family:'Segoe UI', Arial, sans-serif;
     background:#0b0b0b;
     color:white;
 }
 
-/* HEADER (FIXED + STABLE) */
+/* HEADER */
 
 header{
     position:fixed;
     top:0;
-    left:0;
-    right:0;
+    width:100%;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:15px 50px;
-    background:linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.4));
-    z-index:9999;
+    padding:15px 40px;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+    z-index:1000;
 }
 
 .logo{
     font-size:22px;
     font-weight:600;
-    letter-spacing:1px;
 }
-
-/* NAV FIX */
 
 nav{
     display:flex;
-    gap:28px;
-    flex-shrink:0;
+    gap:25px;
 }
 
 nav a{
     text-decoration:none;
     color:white;
-    opacity:0.75;
+    opacity:0.7;
     font-size:14px;
-    white-space:nowrap;
 }
 
 nav a:hover{
     opacity:1;
 }
 
-/* HERO FIX */
+/* HERO */
 
 .hero{
-    margin-top:70px;   /* 🔥 HEADER OVERLAP FIX */
     height:70vh;
     background:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba') center/cover;
     display:flex;
@@ -79,7 +72,6 @@ nav a:hover{
 
 .hero p{
     opacity:0.7;
-    line-height:1.5;
 }
 
 /* CONTROLS */
@@ -88,13 +80,16 @@ nav a:hover{
     margin-top:20px;
     display:flex;
     gap:10px;
+    flex-wrap:wrap;
 }
 
-input{
+input, select{
     padding:10px 15px;
     border-radius:4px;
     border:none;
-    width:250px;
+    background:white;
+    color:black;
+    font-weight:500;
 }
 
 /* SECTION */
@@ -140,16 +135,15 @@ input{
     left:0;
     width:100%;
     height:100%;
-    background:rgba(0,0,0,0.85);
-    backdrop-filter:blur(10px);
+    background:rgba(0,0,0,0.9);
     display:none;
     justify-content:center;
     align-items:center;
-    z-index:99999;
+    z-index:9999;
 }
 
 .overlay-content{
-    background:linear-gradient(145deg,#111,#000);
+    background:#111;
     width:85%;
     max-width:900px;
     border-radius:18px;
@@ -163,16 +157,21 @@ input{
     border-radius:12px;
 }
 
-.overlay-info h2{
-    margin:0;
-}
-
 .close-btn{
     position:absolute;
     top:25px;
     right:40px;
-    font-size:20px;
+    font-size:22px;
     cursor:pointer;
+}
+
+.overlay-info h2{
+    margin:0;
+}
+
+.overlay-info p{
+    opacity:0.8;
+    line-height:1.6;
 }
 
 </style>
@@ -200,79 +199,150 @@ input{
 <p>Discover films through emotion, conflict, and cinematic impact.</p>
 
 <div class="controls">
+
 <input type="text" id="search" placeholder="Search Films...">
-</div>
+
+<select id="ratingFilter">
+<option value="">All Ratings</option>
+<option value="⭐ 5/5">⭐ 5/5</option>
+<option value="⭐ 4/5">⭐ 4/5</option>
+<option value="⭐ 3/5">⭐ 3/5</option>
+</select>
+
+<select id="verdictFilter">
+<option value="">All Verdicts</option>
+<option value="Must Watch">🔥 Must Watch</option>
+<option value="Highly Recommended">👑 Highly Recommended</option>
+<option value="Worth Watching">👍 Worth Watching</option>
+</select>
+
+<!-- 🌍 LANGUAGE SYSTEM -->
+
+<select id="languageSwitcher">
+<option value="English">🌍 English</option>
+<option value="मराठी">🇮🇳 मराठी</option>
+<option value="Hindi">🇮🇳 Hindi</option>
+<option value="Spanish">🌎 Spanish</option>
+<option value="French">🌎 French</option>
+<option value="German">🌎 German</option>
+<option value="Chinese">🌎 Chinese</option>
+<option value="Japanese">🌎 Japanese</option>
+</select>
 
 </div>
 </div>
+</div>
 
-<!-- FILM SECTION -->
+<!-- FILMS -->
 
 <div class="section">
 <div class="sectionTitle">🔥 Featured Reviews</div>
 <div class="grid" id="grid"></div>
 </div>
 
-<!-- FILM OVERLAY -->
+<!-- OVERLAY -->
 
-<div id="filmOverlay" class="overlay">
+<div id="overlay" class="overlay">
+<span class="close-btn" onclick="closeOverlay()">✖</span>
 
-    <span class="close-btn" onclick="closeOverlay()">✖</span>
+<div class="overlay-content">
+<img id="overlayPoster" class="overlay-poster">
 
-    <div class="overlay-content">
-        <img id="overlayPoster" class="overlay-poster">
+<div class="overlay-info">
+<h2 id="overlayTitle"></h2>
+<div id="overlayMeta"></div>
+<p id="overlayReview"></p>
+</div>
 
-        <div class="overlay-info">
-            <h2 id="overlayTitle"></h2>
-            <div id="overlayMeta"></div>
-            <p id="overlayReview"></p>
-        </div>
-    </div>
-
+</div>
 </div>
 
 <script>
 
 let films=[];
+let currentLanguage="English";
+
+/* LOAD DATA */
 
 fetch('reviews.json')
 .then(res=>res.json())
 .then(data=>{
     films=data;
-    renderFilms(data);
+    applyFilters();
 });
+
+/* RENDER */
 
 function renderFilms(data){
 
     const grid=document.getElementById("grid");
 
-    grid.innerHTML=data.map(film=>`
+    grid.innerHTML=data.map((film,index)=>`
 
-        <div class="card">
-           <img src="${film.poster}" 
-           onerror="this.src='https://via.placeholder.com/300x450?text=No+Poster'">
+        <div class="card" onclick="openOverlay(${index})">
+            <img src="${film.poster}" 
+            onerror="this.src='https://via.placeholder.com/300x450?text=No+Poster'">
         </div>
 
     `).join("");
 }
 
-/* SEARCH */
+/* FILTER ENGINE */
 
-document.getElementById("search").addEventListener("input",()=>{
+function applyFilters(){
 
-    const value=document.getElementById("search").value.toLowerCase();
+    const search=document.getElementById("search").value.toLowerCase();
+    const rating=document.getElementById("ratingFilter").value;
+    const verdict=document.getElementById("verdictFilter").value;
 
-    const filtered=films.filter(film=>
+    const filtered=films.filter(film=>{
 
-        film.movie.toLowerCase().includes(value) ||
-        film.rating.toLowerCase().includes(value) ||
-        film.verdict.toLowerCase().includes(value) ||
-        (film.platform && film.platform.toLowerCase().includes(value))
+        return (
+            (!search || film.movie.toLowerCase().includes(search)) &&
+            (!rating || film.rating===rating) &&
+            (!verdict || film.verdict.includes(verdict))
+        );
 
-    );
+    });
 
     renderFilms(filtered);
+}
+
+/* EVENTS */
+
+document.getElementById("search").addEventListener("input",applyFilters);
+document.getElementById("ratingFilter").addEventListener("change",applyFilters);
+document.getElementById("verdictFilter").addEventListener("change",applyFilters);
+
+/* 🌍 LANGUAGE SWITCH */
+
+document.getElementById("languageSwitcher").addEventListener("change",(e)=>{
+    currentLanguage=e.target.value;
 });
+
+/* 🎬 OVERLAY */
+
+function openOverlay(index){
+
+    const film=films[index];
+
+    document.getElementById("overlay").style.display="flex";
+    document.getElementById("overlayPoster").src=film.poster;
+    document.getElementById("overlayTitle").innerText=film.movie;
+    document.getElementById("overlayMeta").innerText=${film.rating} • ${film.verdict};
+
+    const reviewText=film.details?.[currentLanguage] 
+        || film.details?.["English"] 
+        || "Review not available.";
+
+    document.getElementById("overlayReview").innerText=reviewText;
+}
+
+/* CLOSE */
+
+function closeOverlay(){
+    document.getElementById("overlay").style.display="none";
+}
 
 </script>
 

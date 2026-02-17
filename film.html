@@ -2,118 +2,390 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Film View</title>
+<title>Cinema Verdict</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<meta name="description" content="Cinema Verdict – Film Intelligence Platform">
+<meta name="theme-color" content="#000000">
+
 <style>
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #0f0f0f;
+    background: radial-gradient(circle at top, #1b1b1b, #0f0f0f);
     color: white;
 }
 
-.container {
-    max-width: 1000px;
+/* HEADER */
+
+.header {
+    padding: 20px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    opacity: 0.8;
+}
+
+.back {
+    padding: 0 20px;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+/* HERO */
+
+.hero {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    max-width: 1100px;
     margin: auto;
     padding: 30px 20px;
 }
 
 .poster {
-    width: 100%;
-    max-width: 300px;
-    border-radius: 12px;
+    width: 280px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    background: rgba(255,255,255,0.05);
 }
 
-.layout {
+.details {
+    flex: 1;
+}
+
+/* TITLE */
+
+.title {
+    font-size: 34px;
+}
+
+/* BADGES */
+
+.badges {
     display: flex;
-    gap: 30px;
-    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
 }
 
-.meta {
-    opacity: 0.7;
-    margin: 10px 0;
-}
-
-.review {
-    margin-top: 20px;
-    line-height: 1.6;
-    opacity: 0.85;
-}
-
-.button {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 20px;
-    border-radius: 30px;
-    background: white;
-    color: black;
-    text-decoration: none;
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
     font-weight: bold;
 }
 
-.back {
-    opacity: 0.5;
-    cursor: pointer;
-    margin-bottom: 20px;
+.rating { background: white; color: black; }
+.verdict { background: gold; color: black; }
+
+/* REVIEW */
+
+.review {
+    line-height: 1.7;
+    opacity: 0.85;
 }
+
+/* BUTTONS */
+
+.buttons {
+    margin-top: 25px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.button {
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+.primary { background: white; color: black; }
+.secondary {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+}
+
+/* SECTIONS */
+
+.section {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+
+/* SIMILAR */
+
+.slider {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.card {
+    min-width: 160px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.card:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* PREMIUM */
+
+.premium-box {
+    margin-top: 30px;
+    background: linear-gradient(45deg, gold, orange);
+    color: black;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+/* LOADING */
+
+.loading {
+    text-align: center;
+    padding: 60px;
+    opacity: 0.5;
+    font-size: 18px;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
+<div class="header">🎬 Cinema Verdict</div>
 <div class="back" onclick="goBack()">← Back</div>
 
-<div class="layout">
-    <img id="poster" class="poster">
-    
-    <div>
-        <h1 id="title"></h1>
-        <div id="meta" class="meta"></div>
-        <div id="review" class="review"></div>
-        <a id="linkBtn" class="button" target="_blank">View More</a>
+<div id="loading" class="loading">Loading Film Intelligence…</div>
+
+<div id="content" style="display:none">
+
+    <div class="hero">
+
+        <img id="poster" class="poster">
+
+        <div class="details">
+
+            <div id="title" class="title"></div>
+
+            <div class="badges">
+                <div id="rating" class="badge rating"></div>
+                <div id="verdict" class="badge verdict"></div>
+            </div>
+
+            <div id="review" class="review"></div>
+
+            <div class="buttons">
+                <button class="button primary" onclick="openLink()">View Details</button>
+                <button class="button secondary" onclick="playTrailer()">▶ Trailer</button>
+                <button id="watchBtn" class="button secondary" onclick="toggleWatchlist()">💾 Watchlist</button>
+            </div>
+
+            <div class="premium-box">
+            👑 Premium Verdict Engine – Expanding Soon
+            </div>
+
+        </div>
+
     </div>
-</div>
+
+    <div class="section">
+        <div class="section-title">🎬 Similar Films</div>
+        <div id="similar" class="slider"></div>
+    </div>
 
 </div>
 
 <script>
+
 const CSV_URL = "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/refs/heads/main/Cinema%20Verdict%20Studio%2030a48756048f803eb140c9610ede1542.csv";
 
 const params = new URLSearchParams(window.location.search);
 const movieName = params.get("movie");
 
+let allMovies = [];
+let currentMovie = null;
+
+/* FETCH CSV */
+
 fetch(CSV_URL)
 .then(res => res.text())
 .then(csv => {
-    const rows = csv.split("\n").slice(1);
 
-    rows.forEach(row => {
-        const cols = row.match(/(".?"|[^",\s]+)(?=\s,|\s*$)/g);
-        if (!cols) return;
+    const rows = csv.trim().split("\n");
+    const headers = rows[0].split(",");
 
-        const movie = clean(cols[0]);
+    for (let i = 1; i < rows.length; i++) {
 
-        if (movie === movieName) {
-            document.getElementById("title").innerText = movie;
-            document.getElementById("poster").src = clean(cols[1]);
-            document.getElementById("meta").innerText = clean(cols[2]) + " • " + clean(cols[3]);
-            document.getElementById("review").innerText = clean(cols[4]);
-            document.getElementById("linkBtn").href = clean(cols[5]) || "#";
+        const cols = rows[i].match(/(".?"|[^",]+)(?=\s,|\s*$)/g);
+        if (!cols) continue;
+
+        const movieData = {
+            name: clean(cols[0]),
+            poster: clean(cols[1]),
+            rating: clean(cols[2]),
+            verdict: clean(cols[3]),
+            review: clean(cols[4]),
+            link: clean(cols[5])
+        };
+
+        allMovies.push(movieData);
+
+        if (movieData.name === movieName) {
+            currentMovie = movieData;
         }
+
+    }
+
+    if (!currentMovie) {
+        showError();
+        return;
+    }
+
+    renderMovie();
+    renderSimilar();
+    updateWatchlistState();
+
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("content").style.display = "block";
+
+})
+.catch(() => showError());
+
+/* RENDER */
+
+function renderMovie() {
+
+    document.getElementById("title").innerText = currentMovie.name;
+
+    const poster = document.getElementById("poster");
+
+    poster.src = currentMovie.poster || "https://via.placeholder.com/300x450?text=No+Poster";
+
+    poster.onerror = () => {
+        poster.src = "https://via.placeholder.com/300x450?text=No+Poster";
+    };
+
+    document.getElementById("rating").innerText = currentMovie.rating;
+    document.getElementById("verdict").innerText = currentMovie.verdict;
+    document.getElementById("review").innerText = currentMovie.review;
+
+}
+
+function renderSimilar() {
+
+    const container = document.getElementById("similar");
+
+    const similar = allMovies.filter(m =>
+        m.verdict === currentMovie.verdict && m.name !== currentMovie.name
+    );
+
+    similar.forEach(movie => {
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <img src="${movie.poster}">
+            <div><b>${movie.name}</b></div>
+            <div style="opacity:0.5">${movie.rating}</div>
+        `;
+
+        card.onclick = () => {
+            window.location.href = "film.html?movie=" + encodeURIComponent(movie.name);
+        };
+
+        container.appendChild(card);
+
     });
-});
+
+}
+
+/* BUTTON ACTIONS */
+
+function openLink() {
+    if (!currentMovie.link) {
+        alert("Details लिंक उपलब्ध नाही.");
+        return;
+    }
+    window.open(currentMovie.link, "_blank");
+}
+
+function playTrailer() {
+    openLink();
+}
+
+/* WATCHLIST */
+
+function toggleWatchlist() {
+
+    const watchlist = JSON.parse(localStorage.getItem("watchlist") || "[]");
+
+    if (watchlist.includes(currentMovie.name)) {
+
+        const updated = watchlist.filter(m => m !== currentMovie.name);
+        localStorage.setItem("watchlist", JSON.stringify(updated));
+
+    } else {
+
+        watchlist.push(currentMovie.name);
+        localStorage.setItem("watchlist", JSON.stringify(watchlist));
+
+    }
+
+    updateWatchlistState();
+}
+
+function updateWatchlistState() {
+
+    const watchlist = JSON.parse(localStorage.getItem("watchlist") || "[]");
+    const btn = document.getElementById("watchBtn");
+
+    if (watchlist.includes(currentMovie.name)) {
+        btn.innerText = "✅ In Watchlist";
+    } else {
+        btn.innerText = "💾 Watchlist";
+    }
+}
+
+/* HELPERS */
 
 function clean(text) {
-    return text ? text.replace(/"/g, '') : '';
+    return text ? text.replace(/"/g, '').trim() : '';
 }
 
 function goBack() {
-    window.history.back();
+    window.location.href = "index.html";
 }
+
+function showError() {
+    document.getElementById("loading").innerText = "❌ Film Data Load Failed";
+}
+
 </script>
 
 </body>

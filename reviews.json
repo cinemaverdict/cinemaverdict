@@ -16,11 +16,13 @@
     "poster": "titanic.jpg",
     "rating": "⭐ 5/5",
     "verdict": "🔥 Must Watch"
+    "platform":"Netflix"
   },
   {
   "movie": "New Film",
   "poster": "newfilm.jpg",
   "rating": "⭐ 4/5",
   "verdict": "👍 Worth Watching"
+    "platform":
 }
 ]

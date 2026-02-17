@@ -5,6 +5,12 @@
 <title>Cinema Verdict</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- SEO FOUNDATION -->
+<meta name="description" content="Cinema Verdict – Cinema Beyond Reviews. Global Film Intelligence Platform.">
+<meta property="og:title" content="Cinema Verdict">
+<meta property="og:description" content="Cinema Beyond Reviews.">
+<meta property="og:type" content="website">
+
 <style>
 body {
     margin: 0;
@@ -15,22 +21,45 @@ body {
 
 /* HEADER */
 .header {
+    position: sticky;
+    top: 0;
+    background: black;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* NAV */
+.nav {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* HERO */
+.hero {
     text-align: center;
     padding: 60px 20px 30px;
 }
 
-.logo {
-    font-size: 34px;
-    font-weight: bold;
+.hero h1 {
+    margin: 0;
+    font-size: 36px;
 }
 
-.tagline {
+.hero p {
     opacity: 0.6;
-    font-size: 14px;
-    margin-top: 8px;
 }
 
-/* SEARCH + FILTER */
+/* CONTROLS */
 .controls {
     text-align: center;
     margin: 20px;
@@ -45,12 +74,21 @@ input, select {
     color: white;
 }
 
+/* SECTIONS */
+.section {
+    padding: 20px 30px;
+}
+
+.section-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
 /* GRID */
 .reviews {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-    padding: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 18px;
 }
 
 .card {
@@ -67,7 +105,7 @@ input, select {
 
 .poster {
     width: 100%;
-    aspect-ratio: 2 / 3;
+    aspect-ratio: 2/3;
     object-fit: cover;
 }
 
@@ -89,11 +127,10 @@ input, select {
 .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0,0,0,0.95);
     display: none;
     justify-content: center;
     align-items: center;
-    animation: fadeIn 0.3s ease;
 }
 
 .overlay-content {
@@ -102,7 +139,6 @@ input, select {
     border-radius: 12px;
     max-width: 500px;
     width: 90%;
-    animation: scaleIn 0.3s ease;
 }
 
 .overlay img {
@@ -116,27 +152,38 @@ input, select {
     opacity: 0.6;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0 }
-    to { opacity: 1 }
-}
-
-@keyframes scaleIn {
-    from { transform: scale(0.9) }
-    to { transform: scale(1) }
+/* FOOTER */
+.footer {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 12px;
+    opacity: 0.4;
 }
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
     <div class="logo">Cinema Verdict</div>
-    <div class="tagline">Cinema Beyond Reviews.</div>
+    <div class="nav">
+        <div>Home</div>
+        <div>Reviews</div>
+        <div>Trending</div>
+        <div>OTT</div>
+    </div>
 </div>
 
+<!-- HERO -->
+<div class="hero">
+    <h1>Cinema Verdict</h1>
+    <p>Cinema Beyond Reviews.</p>
+</div>
+
+<!-- CONTROLS -->
 <div class="controls">
-    <input type="text" id="searchInput" placeholder="Search movies..." />
+    <input type="text" id="searchInput" placeholder="Search Movies..." />
     
     <select id="ratingFilter">
         <option value="all">All Ratings</option>
@@ -150,9 +197,20 @@ input, select {
         <option value="Must Watch">🔥 Must Watch</option>
         <option value="Highly Recommended">👑 Highly Recommended</option>
     </select>
+
+    <select id="languageSwitch">
+        <option>🌍 Language</option>
+        <option>English</option>
+        <option>मराठी</option>
+        <option>हिंदी</option>
+    </select>
 </div>
 
-<div class="reviews" id="reviewsContainer"></div>
+<!-- TRENDING -->
+<div class="section">
+    <div class="section-title">🔥 Trending Films</div>
+    <div class="reviews" id="reviewsContainer"></div>
+</div>
 
 <!-- OVERLAY -->
 <div class="overlay" id="overlay">
@@ -165,15 +223,41 @@ input, select {
     </div>
 </div>
 
+<!-- FOOTER -->
+<div class="footer">
+© Cinema Verdict – Global Film Intelligence Platform
+</div>
+
 <script>
+const CSV_URL = "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/refs/heads/main/Cinema%20Verdict%20Studio%2030a48756048f803eb140c9610ede1542.csv";
+
 let moviesData = [];
 
-fetch('reviews.json')
-.then(res => res.json())
-.then(data => {
-    moviesData = data;
-    renderMovies(data);
+fetch(CSV_URL)
+.then(res => res.text())
+.then(csv => {
+    const rows = csv.split("\n").slice(1);
+
+    rows.forEach(row => {
+        const cols = row.match(/(".?"|[^",\s]+)(?=\s,|\s*$)/g);
+
+        if (!cols) return;
+
+        moviesData.push({
+            movie: clean(cols[0]),
+            poster: clean(cols[1]),
+            rating: clean(cols[2]),
+            verdict: clean(cols[3]),
+            review: clean(cols[4])
+        });
+    });
+
+    renderMovies(moviesData);
 });
+
+function clean(text) {
+    return text ? text.replace(/"/g, '') : '';
+}
 
 function renderMovies(data) {
     const container = document.getElementById("reviewsContainer");
@@ -182,7 +266,7 @@ function renderMovies(data) {
     data.forEach(movie => {
         container.innerHTML += `
             <div class="card movie-card" onclick='openOverlay(${JSON.stringify(movie)})'>
-                <img class="poster" src="${movie.poster}">
+                <img class="poster" src="${movie.poster || ''}">
                 <div class="card-content">
                     <div class="movie-title">${movie.movie}</div>
                     <div class="meta">${movie.rating} • ${movie.verdict}</div>
@@ -192,9 +276,10 @@ function renderMovies(data) {
     });
 }
 
-document.getElementById("searchInput").addEventListener("keyup", filterMovies);
-document.getElementById("ratingFilter").addEventListener("change", filterMovies);
-document.getElementById("verdictFilter").addEventListener("change", filterMovies);
+/* SEARCH + FILTER */
+searchInput.addEventListener("keyup", filterMovies);
+ratingFilter.addEventListener("change", filterMovies);
+verdictFilter.addEventListener("change", filterMovies);
 
 function filterMovies() {
     let search = searchInput.value.toLowerCase();
@@ -212,6 +297,7 @@ function filterMovies() {
     renderMovies(filtered);
 }
 
+/* OVERLAY */
 function openOverlay(movie) {
     overlay.style.display = "flex";
     overlayPoster.src = movie.poster;

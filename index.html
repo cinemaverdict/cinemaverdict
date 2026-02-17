@@ -5,313 +5,359 @@
 <title>Cinema Verdict</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEO FOUNDATION -->
-<meta name="description" content="Cinema Verdict – Cinema Beyond Reviews. Global Film Intelligence Platform.">
-<meta property="og:title" content="Cinema Verdict">
-<meta property="og:description" content="Cinema Beyond Reviews.">
-<meta property="og:type" content="website">
-
 <style>
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #0f0f0f;
+    background: black;
     color: white;
+}
+
+/* LOGIN */
+
+#loginScreen {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input {
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    width: 220px;
 }
 
 /* HEADER */
-.header {
-    position: sticky;
-    top: 0;
-    background: black;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-}
 
-.logo {
-    font-size: 18px;
+.header {
+    padding: 15px;
+    text-align: center;
+    font-size: 20px;
     font-weight: bold;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 /* NAV */
+
 .nav {
     display: flex;
-    gap: 20px;
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-/* HERO */
-.hero {
-    text-align: center;
-    padding: 60px 20px 30px;
-}
-
-.hero h1 {
-    margin: 0;
-    font-size: 36px;
-}
-
-.hero p {
-    opacity: 0.6;
-}
-
-/* CONTROLS */
-.controls {
-    text-align: center;
-    margin: 20px;
-}
-
-input, select {
+    justify-content: center;
+    gap: 15px;
     padding: 10px;
-    margin: 5px;
-    border-radius: 20px;
-    border: none;
-    background: rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav button {
+    background: transparent;
     color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
-/* SECTIONS */
-.section {
-    padding: 20px 30px;
+/* SEARCH */
+
+.searchBar {
+    text-align: center;
+    padding: 15px;
 }
 
-.section-title {
-    font-size: 18px;
-    margin-bottom: 15px;
+.searchBar input {
+    width: 260px;
 }
 
 /* GRID */
-.reviews {
+
+.grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    padding: 20px;
 }
 
 .card {
-    background: #181818;
-    border-radius: 12px;
-    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    padding: 10px;
+    border-radius: 10px;
     cursor: pointer;
     transition: 0.3s;
 }
 
 .card:hover {
-    transform: translateY(-6px);
+    background: rgba(255,255,255,0.12);
 }
 
-.poster {
+.card img {
     width: 100%;
-    aspect-ratio: 2/3;
-    object-fit: cover;
+    border-radius: 6px;
 }
 
-.card-content {
-    padding: 10px;
-}
+/* FILM VIEW */
 
-.movie-title {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.meta {
-    font-size: 12px;
-    opacity: 0.7;
-}
-
-/* OVERLAY */
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.95);
+#filmView {
     display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-.overlay-content {
-    background: #111;
     padding: 20px;
-    border-radius: 12px;
-    max-width: 500px;
-    width: 90%;
 }
 
-.overlay img {
+/* ADMIN */
+
+#adminPanel {
+    display: none;
+    padding: 20px;
+}
+
+textarea {
     width: 100%;
-    border-radius: 10px;
+    height: 120px;
 }
 
-.close-btn {
-    float: right;
+.button {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
     cursor: pointer;
-    opacity: 0.6;
 }
 
-/* FOOTER */
-.footer {
-    text-align: center;
-    padding: 40px 20px;
-    font-size: 12px;
-    opacity: 0.4;
-}
+.primary { background: white; color: black; }
+
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-    <div class="logo">Cinema Verdict</div>
+<!-- LOGIN -->
+
+<div id="loginScreen">
+    <h2>🔐 Cinema Verdict</h2>
+    <input id="password" type="password" placeholder="Enter Password">
+    <button class="button primary" onclick="login()">Enter</button>
+</div>
+
+<!-- MAIN SYSTEM -->
+
+<div id="mainSystem" style="display:none">
+
+    <div class="header">🎬 Cinema Verdict</div>
+
     <div class="nav">
-        <div>Home</div>
-        <div>Reviews</div>
-        <div>Trending</div>
-        <div>OTT</div>
+        <button onclick="showHome()">Home</button>
+        <button onclick="showWatchlist()">Watchlist 💾</button>
+        <button onclick="showAdmin()">Admin 😈</button>
+        <button onclick="logout()">Logout</button>
     </div>
-</div>
 
-<!-- HERO -->
-<div class="hero">
-    <h1>Cinema Verdict</h1>
-    <p>Cinema Beyond Reviews.</p>
-</div>
-
-<!-- CONTROLS -->
-<div class="controls">
-    <input type="text" id="searchInput" placeholder="Search Movies..." />
-    
-    <select id="ratingFilter">
-        <option value="all">All Ratings</option>
-        <option value="5">⭐ 5</option>
-        <option value="4">⭐ 4</option>
-        <option value="3">⭐ 3</option>
-    </select>
-
-    <select id="verdictFilter">
-        <option value="all">All Verdicts</option>
-        <option value="Must Watch">🔥 Must Watch</option>
-        <option value="Highly Recommended">👑 Highly Recommended</option>
-    </select>
-
-    <select id="languageSwitch">
-        <option>🌍 Language</option>
-        <option>English</option>
-        <option>मराठी</option>
-        <option>हिंदी</option>
-    </select>
-</div>
-
-<!-- TRENDING -->
-<div class="section">
-    <div class="section-title">🔥 Trending Films</div>
-    <div class="reviews" id="reviewsContainer"></div>
-</div>
-
-<!-- OVERLAY -->
-<div class="overlay" id="overlay">
-    <div class="overlay-content">
-        <div class="close-btn" onclick="closeOverlay()">✖</div>
-        <img id="overlayPoster">
-        <h2 id="overlayTitle"></h2>
-        <div id="overlayMeta"></div>
-        <p id="overlayReview"></p>
+    <div class="searchBar">
+        <input id="searchInput" placeholder="Search Film…" oninput="renderMovies()">
     </div>
-</div>
 
-<!-- FOOTER -->
-<div class="footer">
-© Cinema Verdict – Global Film Intelligence Platform
+    <div id="homeView" class="grid"></div>
+
+    <!-- FILM VIEW -->
+
+    <div id="filmView">
+        <button onclick="showHome()">← Back</button>
+        <h2 id="filmTitle"></h2>
+        <img id="filmPoster" width="240">
+        <p id="filmRating"></p>
+        <p id="filmVerdict"></p>
+        <p id="filmReview"></p>
+        <button onclick="toggleWatchlist()">💾 Watchlist</button>
+    </div>
+
+    <!-- WATCHLIST -->
+
+    <div id="watchlistView" class="grid" style="display:none"></div>
+
+    <!-- ADMIN -->
+
+    <div id="adminPanel">
+        <h3>😈 Admin Panel</h3>
+        <input id="movieName" placeholder="Movie Name"><br><br>
+        <input id="moviePoster" placeholder="Poster URL"><br><br>
+        <input id="movieRating" placeholder="Rating"><br><br>
+        <input id="movieVerdict" placeholder="Verdict"><br><br>
+        <textarea id="movieReview" placeholder="Review"></textarea><br><br>
+        <button class="button primary" onclick="addMovie()">Add Film</button>
+    </div>
+
 </div>
 
 <script>
+
+/* CONFIG */
+
+const ADMIN_PASSWORD = "CV_Master_Admin_2026";
+
+/* CSV SOURCE */
+
 const CSV_URL = "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/refs/heads/main/Cinema%20Verdict%20Studio%2030a48756048f803eb140c9610ede1542.csv";
 
-let moviesData = [];
+/* DATA */
+
+let movies = [];
+
+/* FETCH CSV */
 
 fetch(CSV_URL)
 .then(res => res.text())
 .then(csv => {
-    const rows = csv.split("\n").slice(1);
+
+    const rows = csv.trim().split("\n").slice(1);
 
     rows.forEach(row => {
-        const cols = row.match(/(".?"|[^",\s]+)(?=\s,|\s*$)/g);
 
+        const cols = row.match(/(".?"|[^",]+)(?=\s,|\s*$)/g);
         if (!cols) return;
 
-        moviesData.push({
-            movie: clean(cols[0]),
+        movies.push({
+            name: clean(cols[0]),
             poster: clean(cols[1]),
             rating: clean(cols[2]),
             verdict: clean(cols[3]),
             review: clean(cols[4])
         });
+
     });
 
-    renderMovies(moviesData);
 });
 
+let currentFilm = null;
+
+/* LOGIN */
+
+function login() {
+    if (password.value === ADMIN_PASSWORD) {
+        loginScreen.style.display = "none";
+        mainSystem.style.display = "block";
+        renderMovies();
+    } else {
+        alert("Wrong Password ❌");
+    }
+}
+
+function logout() { location.reload(); }
+
+/* VIEW CONTROL */
+
+function showHome() {
+    hideAll();
+    homeView.style.display = "grid";
+    renderMovies();
+}
+
+function showFilm(movie) {
+
+    hideAll();
+    currentFilm = movie;
+
+    filmView.style.display = "block";
+
+    filmTitle.innerText = movie.name;
+    filmPoster.src = movie.poster;
+    filmRating.innerText = movie.rating;
+    filmVerdict.innerText = movie.verdict;
+    filmReview.innerText = movie.review;
+}
+
+function showWatchlist() {
+
+    hideAll();
+    watchlistView.style.display = "grid";
+
+    const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+
+    watchlistView.innerHTML = "";
+
+    movies.filter(m => watchlist.includes(m.name))
+          .forEach(m => createCard(m, watchlistView));
+}
+
+function showAdmin() {
+    hideAll();
+    adminPanel.style.display = "block";
+}
+
+function hideAll() {
+    homeView.style.display = "none";
+    filmView.style.display = "none";
+    watchlistView.style.display = "none";
+    adminPanel.style.display = "none";
+}
+
+/* RENDER */
+
+function renderMovies() {
+
+    const search = searchInput.value.toLowerCase();
+
+    homeView.innerHTML = "";
+
+    movies.filter(m => m.name.toLowerCase().includes(search))
+          .forEach(m => createCard(m, homeView));
+}
+
+function createCard(movie, container) {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+        <img src="${movie.poster}">
+        <b>${movie.name}</b>
+        <div>${movie.rating}</div>
+    `;
+
+    card.onclick = () => showFilm(movie);
+
+    container.appendChild(card);
+}
+
+/* WATCHLIST */
+
+function toggleWatchlist() {
+
+    const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
+
+    if (watchlist.includes(currentFilm.name)) {
+        const updated = watchlist.filter(m => m !== currentFilm.name);
+        localStorage.setItem("watchlist", JSON.stringify(updated));
+    } else {
+        watchlist.push(currentFilm.name);
+        localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    }
+
+    alert("Updated 💾");
+}
+
+/* ADMIN */
+
+function addMovie() {
+
+    movies.push({
+        name: movieName.value,
+        poster: moviePoster.value,
+        rating: movieRating.value,
+        verdict: movieVerdict.value,
+        review: movieReview.value
+    });
+
+    alert("Film Added (Local Session) ✅");
+
+    renderMovies();
+}
+
+/* HELPERS */
+
 function clean(text) {
-    return text ? text.replace(/"/g, '') : '';
+    return text ? text.replace(/"/g, '').trim() : '';
 }
 
-function renderMovies(data) {
-    const container = document.getElementById("reviewsContainer");
-    container.innerHTML = "";
-
-    data.forEach(movie => {
-        container.innerHTML += `
-            <div class="card movie-card" onclick="openFilm('${movie.movie}')">
-                <img class="poster" src="${movie.poster || ''}">
-                <div class="card-content">
-                    <div class="movie-title">${movie.movie}</div>
-                    <div class="meta">${movie.rating} • ${movie.verdict}</div>
-                </div>
-            </div>
-        `;
-    });
-}
-
-/* SEARCH + FILTER */
-searchInput.addEventListener("keyup", filterMovies);
-ratingFilter.addEventListener("change", filterMovies);
-verdictFilter.addEventListener("change", filterMovies);
-
-function filterMovies() {
-    let search = searchInput.value.toLowerCase();
-    let rating = ratingFilter.value;
-    let verdict = verdictFilter.value;
-
-    let filtered = moviesData.filter(movie => {
-        return (
-            movie.movie.toLowerCase().includes(search) &&
-            (rating === "all" || movie.rating.includes(rating)) &&
-            (verdict === "all" || movie.verdict.includes(verdict))
-        );
-    });
-
-    renderMovies(filtered);
-}
-
-/* OVERLAY */
-function openOverlay(movie) {
-    overlay.style.display = "flex";
-    overlayPoster.src = movie.poster;
-    overlayTitle.innerText = movie.movie;
-    overlayMeta.innerText = movie.rating + " • " + movie.verdict;
-    overlayReview.innerText = movie.review || "";
-}
-
-function closeOverlay() {
-    overlay.style.display = "none";
-}
-    function openFilm(movieName) {
-    window.location.href = "film.html?movie=" + encodeURIComponent(movieName);
-}
 </script>
 
 </body>

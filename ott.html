@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cinema Verdict – OTT Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #111, #000);
+    color: white;
+}
+
+/* HEADER */
+
+.header {
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    opacity: 0.85;
+}
+
+/* SUBTITLE */
+
+.subtitle {
+    text-align: center;
+    font-size: 15px;
+    opacity: 0.5;
+    margin-bottom: 25px;
+}
+
+/* GRID */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+    padding: 20px 40px 60px;
+}
+
+/* CARD */
+
+.card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.35s;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 0 25px rgba(255,255,255,0.15);
+}
+
+/* POSTER */
+
+.poster {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    background: #111;
+}
+
+/* CONTENT */
+
+.content {
+    padding: 15px;
+}
+
+.movie {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.meta {
+    font-size: 13px;
+    opacity: 0.6;
+    margin-bottom: 10px;
+}
+
+/* OTT BADGES */
+
+.platforms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.12);
+    opacity: 0.8;
+}
+
+/* BUTTON */
+
+.button {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 7px 14px;
+    font-size: 13px;
+    border-radius: 20px;
+    background: white;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">📺 OTT GUIDE</div>
+<div class="subtitle">Where To Watch Your Favourite Films</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+
+fetch('reviews.json')
+.then(res => res.json())
+.then(data => {
+
+    const grid = document.getElementById('grid');
+
+    data.forEach(film => {
+
+        const platformsHTML = (film.platforms || []).map(p =>
+            <div class="badge">${p}</div>
+        ).join("");
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        card.innerHTML = `
+            <img class="poster" src="${film.poster}" alt="">
+            <div class="content">
+                <div class="movie">${film.movie}</div>
+                <div class="meta">${film.rating} • ${film.verdict}</div>
+
+                <div class="platforms">
+                    ${platformsHTML}
+                </div>
+
+                <a class="button" href="${film.link || '#'}" target="_blank">
+                    ▶ Watch Now
+                </a>
+            </div>
+        `;
+
+        grid.appendChild(card);
+    });
+
+});
+
+</script>
+
+</body>
+</html>

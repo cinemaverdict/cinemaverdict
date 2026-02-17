@@ -1,101 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Cinema Verdict</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Cinema Verdict</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: black;
-            color: white;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: black;
+    color: white;
+}
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            background: rgba(0,0,0,0.9);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: rgba(0,0,0,0.9);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-        }
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 14px;
-        }
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 14px;
+}
 
-        .controls {
-            padding: 20px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+.controls {
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 
-        input, select {
-            padding: 10px;
-            border-radius: 6px;
-            border: none;
-            outline: none;
-        }
+input, select {
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
 
-        .card {
-            background: #111;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: 0.3s;
-        }
+.card {
+    background: #111;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.3s;
+}
 
-        .card:hover {
-            transform: scale(1.03);
-        }
+.card:hover {
+    transform: scale(1.03);
+}
 
-        .poster {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            background: #222;
-        }
+.poster {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    background: #222;
+}
 
-        .info {
-            padding: 10px;
-        }
+.info {
+    padding: 10px;
+}
 
-        .title {
-            font-size: 16px;
-            font-weight: bold;
-        }
+.title {
+    font-size: 16px;
+    font-weight: bold;
+}
 
-        .meta {
-            font-size: 13px;
-            opacity: 0.7;
-        }
-    </style>
+.meta {
+    font-size: 13px;
+    opacity: 0.7;
+}
+</style>
 </head>
 
 <body>
 
 <header>
     <div class="logo">🎬 Cinema Verdict</div>
-
     <nav>
         <a href="#">Home</a>
         <a href="#">Films</a>
@@ -121,7 +120,7 @@
         <option value="👍 Worth Watching">👍 Worth Watching</option>
     </select>
 
-    <select id="language">
+    <select>
         <option>🌐 Language</option>
         <option>English</option>
         <option>मराठी</option>
@@ -135,6 +134,8 @@
 
 const CSV_URL = "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/refs/heads/main/Cinema%20Verdict%20Studio%2030a48756048f803eb140c9610ede1542.csv";
 
+const DEFAULT_POSTER = "https://via.placeholder.com/300x400/111111/FFFFFF?text=Cinema+Verdict";
+
 let films = [];
 
 async function loadFilms() {
@@ -147,16 +148,21 @@ async function loadFilms() {
         const cols = row.split(",");
 
         return {
-            title: cols[0],
-            poster: cols[1] || "https://via.placeholder.com/300x400",
-            rating: cols[2],
-            verdict: cols[3],
-            review: cols[4],
-            link: cols[5]
+            title: (cols[0] || "").trim(),
+            poster: (cols[1] || "").trim(),
+            rating: (cols[2] || "").trim(),
+            verdict: (cols[3] || "").trim(),
+            review: (cols[4] || "").trim(),
+            link: (cols[5] || "").trim()
         };
     });
 
     renderFilms(films);
+}
+
+function resolvePoster(url) {
+    if (!url || url === "") return DEFAULT_POSTER;
+    return url;
 }
 
 function renderFilms(data) {
@@ -164,7 +170,10 @@ function renderFilms(data) {
 
     grid.innerHTML = data.map(film => `
         <div class="card">
-            <img class="poster" src="${film.poster}">
+            <img class="poster" 
+                 src="${resolvePoster(film.poster)}"
+                 onerror="this.src='${DEFAULT_POSTER}'">
+
             <div class="info">
                 <div class="title">${film.title}</div>
                 <div class="meta">${film.rating}</div>

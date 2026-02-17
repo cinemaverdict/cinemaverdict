@@ -265,7 +265,7 @@ function renderMovies(data) {
 
     data.forEach(movie => {
         container.innerHTML += `
-            <div class="card movie-card" onclick='openOverlay(${JSON.stringify(movie)})'>
+            <div class="card movie-card" onclick="openFilm('${movie.movie}')">
                 <img class="poster" src="${movie.poster || ''}">
                 <div class="card-content">
                     <div class="movie-title">${movie.movie}</div>
@@ -310,6 +310,8 @@ function closeOverlay() {
     overlay.style.display = "none";
 }
 </script>
-
+function openFilm(movieName) {
+    window.location.href = "film.html?movie=" + encodeURIComponent(movieName);
+}
 </body>
 </html>

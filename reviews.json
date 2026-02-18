@@ -1,43 +1,29 @@
 [
   {
     "movie": "Sairat",
-    "poster": "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/main/Sairat_Marathi_Film_Poster.jpg",
+    "poster": "Sairat_Marathi_Film_Poster.jpg",
     "rating": "⭐ 5/5",
     "verdict": "🔥 Must Watch",
+
     "details": {
-      "English": "A powerful love story with emotional intensity.",
-      "मराठी": "भावनांनी भरलेली एक प्रभावी प्रेमकथा."
+      "English": "A powerful love story breaking caste barriers.",
+      "मराठी": "जात व्यवस्थेच्या पलीकडील प्रभावी प्रेमकथा.",
+      "Hindi": "जाति व्यवस्था को तोड़ती एक शक्तिशाली प्रेम कहानी।",
+      "Tamil": "சாதி எல்லைகளை மீறும் காதல் கதை.",
+      "Telugu": "కులాలను దాటే ప్రేమ కథ."
     }
   },
 
   {
     "movie": "Lagaan",
-    "poster": "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/main/lagaan.jpg",
+    "poster": "lagaan.jpg",
     "rating": "⭐ 5/5",
     "verdict": "👑 Highly Recommended",
-    "details": {
-      "English": "An epic sports drama with inspiring storytelling.",
-      "Hindi": "एक प्रेरणादायक ऐतिहासिक खेल नाटक।"
-    }
-  },
 
-  {
-    "movie": "Titanic",
-    "poster": "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/main/titanic.jpg",
-    "rating": "⭐ 5/5",
-    "verdict": "🔥 Must Watch",
     "details": {
-      "English": "A timeless cinematic masterpiece."
-    }
-  },
-
-  {
-    "movie": "New Film",
-    "poster": "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/main/newfilm.jpg",
-    "rating": "⭐ 4/5",
-    "verdict": "👍 Worth Watching",
-    "details": {
-      "English": "An enjoyable cinematic experience."
+      "English": "An epic battle of cricket and colonial pride.",
+      "मराठी": "क्रिकेट व स्वाभिमानाचा महाकाव्यात्मक संघर्ष.",
+      "Hindi": "क्रिकेट और औपनिवेशिक गर्व की महागाथा।"
     }
   }
 ]

@@ -23,40 +23,27 @@ header{
     top:0;
     width:100%;
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:center;
-    padding:15px 40px;
-    background:linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0.4));
+    padding:18px 40px;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.95), transparent);
     z-index:1000;
 }
 
 .logo{
-    font-size:22px;
+    font-size:24px;
     font-weight:600;
-}
-
-nav{
-    display:flex;
-    gap:22px;
-    align-items:center;
-}
-
-nav a{
-    text-decoration:none;
-    color:white;
-    opacity:0.75;
-    font-size:14px;
-}
-
-nav a:hover{
-    opacity:1;
+    letter-spacing:1px;
 }
 
 /* HERO */
 
 .hero{
     height:75vh;
-    background:url('cinema verdict studio.jpg') center/cover;
+
+    /* ✅ EXACT FILE NAME */
+    background:url('cinema verdict studio 309487560.jpg') center/cover;
+
     display:flex;
     align-items:flex-end;
     padding:60px 40px;
@@ -73,7 +60,6 @@ nav a:hover{
 
 .hero p{
     opacity:0.7;
-    margin-top:10px;
 }
 
 /* CONTROLS */
@@ -85,17 +71,6 @@ nav a:hover{
     flex-wrap:wrap;
 }
 
-input, select{
-    padding:10px 14px;
-    border-radius:4px;
-    border:none;
-    background:white;
-    color:black;
-    font-weight:500;
-}
-
-/* SEARCH ICON */
-
 .searchBox{
     display:flex;
     align-items:center;
@@ -106,13 +81,13 @@ input, select{
 
 .searchBox span{
     color:black;
-    font-size:14px;
     margin-right:6px;
 }
 
-.searchBox input{
+input, select{
+    padding:10px 14px;
+    border-radius:4px;
     border:none;
-    outline:none;
 }
 
 /* SECTION */
@@ -188,19 +163,25 @@ input, select{
     cursor:pointer;
 }
 
-.overlay-info h2{
-    margin:0;
-}
-
-.overlay-info p{
-    opacity:0.85;
-    line-height:1.6;
-}
+/* ✅ FOOTER (BOTTOM LINKS) */
 
 footer{
-    padding:30px 40px;
-    opacity:0.4;
-    font-size:12px;
+    margin-top:40px;
+    padding:30px;
+    text-align:center;
+    font-size:13px;
+    opacity:0.45;
+}
+
+footer a{
+    color:white;
+    text-decoration:none;
+    margin:0 12px;
+    opacity:0.6;
+}
+
+footer a:hover{
+    opacity:1;
 }
 
 </style>
@@ -210,17 +191,6 @@ footer{
 
 <header>
 <div class="logo">🎬 Cinema Verdict</div>
-
-<nav>
-<a href="index.html">Home</a>
-<a href="film.html">Films</a>
-<a href="trending.html">Trending</a>
-<a href="ott.html">OTT</a>
-<a href="profile.html">Profile</a>
-<a href="about.html">About</a>
-<a href="privacy.html">Privacy</a>
-<a href="disclaimer.html">Disclaimer</a>
-</nav>
 </header>
 
 <!-- HERO -->
@@ -236,20 +206,6 @@ footer{
 <span>🔍</span>
 <input type="text" id="search" placeholder="Search Films...">
 </div>
-
-<select id="ratingFilter">
-<option value="">All Ratings</option>
-<option value="⭐ 5/5">⭐ 5/5</option>
-<option value="⭐ 4/5">⭐ 4/5</option>
-<option value="⭐ 3/5">⭐ 3/5</option>
-</select>
-
-<select id="verdictFilter">
-<option value="">All Verdicts</option>
-<option value="Must Watch">🔥 Must Watch</option>
-<option value="Highly Recommended">👑 Highly Recommended</option>
-<option value="Worth Watching">👍 Worth Watching</option>
-</select>
 
 <select id="languageSwitcher">
 <option value="English">🌍 English</option>
@@ -283,17 +239,20 @@ footer{
 <div class="overlay-content">
 <img id="overlayPoster" class="overlay-poster">
 
-<div class="overlay-info">
+<div>
 <h2 id="overlayTitle"></h2>
-<div id="overlayMeta"></div>
 <p id="overlayReview"></p>
 </div>
 
 </div>
 </div>
 
+<!-- ✅ BOTTOM LINKS -->
+
 <footer>
-Cinema Verdict © Phase 2 Prototype
+<a href="about.html">About</a>
+<a href="privacy.html">Privacy</a>
+<a href="disclaimer.html">Disclaimer</a>
 </footer>
 
 <script>
@@ -307,16 +266,14 @@ fetch('reviews.json')
 .then(res=>res.json())
 .then(data=>{
     films=data;
-    applyFilters();
+    renderFilms(data);
 });
 
 /* RENDER */
 
 function renderFilms(data){
 
-    const grid=document.getElementById("grid");
-
-    grid.innerHTML=data.map((film)=>`
+    grid.innerHTML=data.map(film=>`
 
         <div class="card" onclick="openOverlay('${film.movie}')">
             <img src="${film.poster}" 
@@ -326,32 +283,20 @@ function renderFilms(data){
     `).join("");
 }
 
-/* FILTER ENGINE */
+/* SEARCH */
 
-function applyFilters(){
+search.addEventListener("input",()=>{
 
-    const search=document.getElementById("search").value.toLowerCase();
-    const rating=document.getElementById("ratingFilter").value;
-    const verdict=document.getElementById("verdictFilter").value;
+    const value=search.value.toLowerCase();
 
-    const filtered=films.filter(film=>{
-
-        return (
-            (!search || film.movie.toLowerCase().includes(search)) &&
-            (!rating || film.rating===rating) &&
-            (!verdict || film.verdict.includes(verdict))
-        );
-
-    });
+    const filtered=films.filter(film=>
+        film.movie.toLowerCase().includes(value)
+    );
 
     renderFilms(filtered);
-}
+});
 
-/* EVENTS */
-
-search.addEventListener("input",applyFilters);
-ratingFilter.addEventListener("change",applyFilters);
-verdictFilter.addEventListener("change",applyFilters);
+/* LANGUAGE */
 
 languageSwitcher.addEventListener("change",(e)=>{
     currentLanguage=e.target.value;
@@ -366,7 +311,6 @@ function openOverlay(movieName){
     overlay.style.display="flex";
     overlayPoster.src=film.poster;
     overlayTitle.innerText=film.movie;
-    overlayMeta.innerText=${film.rating} • ${film.verdict};
 
     const reviewText=film.details?.[currentLanguage] 
         || film.details?.["English"] 

@@ -36,23 +36,26 @@ header{
     letter-spacing:1px;
 }
 
-/* ✅ NAVIGATION RESTORED */
+/* NAVIGATION */
 
 nav{
     display:flex;
     gap:22px;
     align-items:center;
-    flex-wrap:wrap;   /* ✅ Important Fix */
+    flex-wrap:wrap;
 }
+
 nav a{
     text-decoration:none;
     color:white;
     font-size:14px;
     opacity:0.7;
+    transition:0.3s;
 }
 
 nav a:hover{
     opacity:1;
+    transform:scale(1.05);
 }
 
 /* HERO */
@@ -60,7 +63,7 @@ nav a:hover{
 .hero{
     height:75vh;
 
-    /* ✅ PREVIOUS THEATRE IMAGE */
+    /* ✅ THEATRE IMAGE RESTORED */
     background:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba') center/cover;
 
     display:flex;
@@ -276,7 +279,7 @@ footer a:hover{
 </div>
 </div>
 
-<!-- BOTTOM LINKS -->
+<!-- FOOTER -->
 
 <footer>
 <a href="about.html">About</a>
@@ -302,6 +305,8 @@ fetch('reviews.json')
 
 function renderFilms(data){
 
+    const grid=document.getElementById("grid");
+
     grid.innerHTML=data.map(film=>`
 
         <div class="card" onclick="openOverlay('${film.movie}')">
@@ -314,9 +319,9 @@ function renderFilms(data){
 
 /* SEARCH */
 
-search.addEventListener("input",()=>{
+document.getElementById("search").addEventListener("input",()=>{
 
-    const value=search.value.toLowerCase();
+    const value=document.getElementById("search").value.toLowerCase();
 
     const filtered=films.filter(film=>
         film.movie.toLowerCase().includes(value)
@@ -327,7 +332,7 @@ search.addEventListener("input",()=>{
 
 /* LANGUAGE */
 
-languageSwitcher.addEventListener("change",(e)=>{
+document.getElementById("languageSwitcher").addEventListener("change",(e)=>{
     currentLanguage=e.target.value;
 });
 
@@ -337,19 +342,21 @@ function openOverlay(movieName){
 
     const film=films.find(f=>f.movie===movieName);
 
-    overlay.style.display="flex";
-    overlayPoster.src=film.poster;
-    overlayTitle.innerText=film.movie;
+    if(!film) return;
+
+    document.getElementById("overlay").style.display="flex";
+    document.getElementById("overlayPoster").src=film.poster;
+    document.getElementById("overlayTitle").innerText=film.movie;
 
     const reviewText=film.details?.[currentLanguage] 
         || film.details?.["English"] 
         || "Review not available.";
 
-    overlayReview.innerText=reviewText;
+    document.getElementById("overlayReview").innerText=reviewText;
 }
 
 function closeOverlay(){
-    overlay.style.display="none";
+    document.getElementById("overlay").style.display="none";
 }
 
 </script>

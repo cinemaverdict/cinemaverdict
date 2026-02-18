@@ -1,26 +1,43 @@
 [
   {
     "movie": "Sairat",
-    "poster": "Sairat_Marathi_Film_Poster.jpg",
+    "poster": "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/main/Sairat_Marathi_Film_Poster.jpg",
     "rating": "⭐ 5/5",
-    "verdict": "🔥 Must Watch"
+    "verdict": "🔥 Must Watch",
+    "details": {
+      "English": "A powerful love story with emotional intensity.",
+      "मराठी": "भावनांनी भरलेली एक प्रभावी प्रेमकथा."
+    }
   },
+
   {
     "movie": "Lagaan",
-    "poster": "lagaan.jpg",
+    "poster": "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/main/lagaan.jpg",
     "rating": "⭐ 5/5",
-    "verdict": "👑 Highly Recommended"
+    "verdict": "👑 Highly Recommended",
+    "details": {
+      "English": "An epic sports drama with inspiring storytelling.",
+      "Hindi": "एक प्रेरणादायक ऐतिहासिक खेल नाटक।"
+    }
   },
+
   {
     "movie": "Titanic",
-    "poster": "titanic.jpg",
+    "poster": "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/main/titanic.jpg",
     "rating": "⭐ 5/5",
-    "verdict": "🔥 Must Watch"
+    "verdict": "🔥 Must Watch",
+    "details": {
+      "English": "A timeless cinematic masterpiece."
+    }
   },
+
   {
     "movie": "New Film",
-    "poster": "newfilm.jpg",
+    "poster": "https://raw.githubusercontent.com/cinemaverdict/cinemaverdict/main/newfilm.jpg",
     "rating": "⭐ 4/5",
-    "verdict": "👍 Worth Watching"
+    "verdict": "👍 Worth Watching",
+    "details": {
+      "English": "An enjoyable cinematic experience."
+    }
   }
 ]

@@ -23,7 +23,7 @@ header{
     top:0;
     width:100%;
     display:flex;
-    justify-content:center;
+    justify-content:space-between;
     align-items:center;
     padding:18px 40px;
     background:linear-gradient(to bottom, rgba(0,0,0,0.95), transparent);
@@ -31,9 +31,27 @@ header{
 }
 
 .logo{
-    font-size:24px;
+    font-size:22px;
     font-weight:600;
     letter-spacing:1px;
+}
+
+/* ✅ NAVIGATION RESTORED */
+
+nav{
+    display:flex;
+    gap:22px;
+}
+
+nav a{
+    text-decoration:none;
+    color:white;
+    font-size:14px;
+    opacity:0.7;
+}
+
+nav a:hover{
+    opacity:1;
 }
 
 /* HERO */
@@ -41,8 +59,8 @@ header{
 .hero{
     height:75vh;
 
-    /* ✅ EXACT FILE NAME */
-    background:url('cinema verdict studio 309487560.jpg') center/cover;
+    /* ✅ PREVIOUS THEATRE IMAGE */
+    background:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba') center/cover;
 
     display:flex;
     align-items:flex-end;
@@ -163,7 +181,7 @@ input, select{
     cursor:pointer;
 }
 
-/* ✅ FOOTER (BOTTOM LINKS) */
+/* FOOTER */
 
 footer{
     margin-top:40px;
@@ -190,7 +208,17 @@ footer a:hover{
 <body>
 
 <header>
+
 <div class="logo">🎬 Cinema Verdict</div>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="film.html">Films</a>
+<a href="trending.html">Trending</a>
+<a href="ott.html">OTT</a>
+<a href="profile.html">Profile</a>
+</nav>
+
 </header>
 
 <!-- HERO -->
@@ -247,7 +275,7 @@ footer a:hover{
 </div>
 </div>
 
-<!-- ✅ BOTTOM LINKS -->
+<!-- BOTTOM LINKS -->
 
 <footer>
 <a href="about.html">About</a>

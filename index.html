@@ -7,8 +7,6 @@
 
 <style>
 
-/* GLOBAL */
-
 body{
     margin:0;
     font-family:'Segoe UI', Arial, sans-serif;
@@ -30,19 +28,20 @@ header{
     z-index:1000;
 }
 
+/* ✅ CENTER LOGO */
+
 .logo{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
     font-size:22px;
     font-weight:600;
     letter-spacing:1px;
 }
 
-/* NAVIGATION */
-
 nav{
     display:flex;
     gap:22px;
-    align-items:center;
-    flex-wrap:wrap;
 }
 
 nav a{
@@ -50,29 +49,20 @@ nav a{
     color:white;
     font-size:14px;
     opacity:0.7;
-    transition:0.3s;
 }
 
 nav a:hover{
     opacity:1;
-    transform:scale(1.05);
 }
 
 /* HERO */
 
 .hero{
     height:75vh;
-
-    /* ✅ THEATRE IMAGE RESTORED */
     background:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba') center/cover;
-
     display:flex;
     align-items:flex-end;
     padding:60px 40px;
-}
-
-.heroContent{
-    max-width:520px;
 }
 
 .hero h1{
@@ -112,32 +102,16 @@ input, select{
     border:none;
 }
 
-/* SECTION */
+/* GRID */
 
 .section{
     padding:25px 40px;
 }
 
-.sectionTitle{
-    font-size:18px;
-    margin-bottom:15px;
-}
-
-/* GRID */
-
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
     gap:15px;
-}
-
-.card{
-    cursor:pointer;
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:scale(1.05);
 }
 
 .card img{
@@ -147,63 +121,18 @@ input, select{
     border-radius:6px;
 }
 
-/* OVERLAY */
-
-.overlay{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.92);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:9999;
-}
-
-.overlay-content{
-    background:#111;
-    width:85%;
-    max-width:900px;
-    border-radius:18px;
-    padding:30px;
-    display:flex;
-    gap:30px;
-}
-
-.overlay-poster{
-    width:280px;
-    border-radius:12px;
-}
-
-.close-btn{
-    position:absolute;
-    top:25px;
-    right:40px;
-    font-size:22px;
-    cursor:pointer;
-}
-
 /* FOOTER */
 
 footer{
-    margin-top:40px;
-    padding:30px;
     text-align:center;
-    font-size:13px;
-    opacity:0.45;
+    padding:30px;
+    opacity:0.4;
 }
 
 footer a{
     color:white;
+    margin:0 10px;
     text-decoration:none;
-    margin:0 12px;
-    opacity:0.6;
-}
-
-footer a:hover{
-    opacity:1;
 }
 
 </style>
@@ -213,8 +142,6 @@ footer a:hover{
 
 <header>
 
-<div class="logo">🎬 Cinema Verdict</div>
-
 <nav>
 <a href="index.html">Home</a>
 <a href="film.html">Films</a>
@@ -223,14 +150,17 @@ footer a:hover{
 <a href="profile.html">Profile</a>
 </nav>
 
+<div class="logo">🎬 Cinema Verdict</div>
+
 </header>
 
 <!-- HERO -->
 
 <div class="hero">
-<div class="heroContent">
-<h1>Cinema Beyond Reviews.</h1>
-<p>Discover films through emotion, conflict, and cinematic impact.</p>
+<div>
+
+<h1 id="heroTitle">Cinema Beyond Reviews.</h1>
+<p id="heroTagline">Discover films through emotion, conflict, and cinematic impact.</p>
 
 <div class="controls">
 
@@ -240,46 +170,28 @@ footer a:hover{
 </div>
 
 <select id="languageSwitcher">
-<option value="English">🌍 English</option>
-<option value="मराठी">🇮🇳 मराठी</option>
-<option value="Hindi">🇮🇳 Hindi</option>
-<option value="Tamil">🇮🇳 Tamil</option>
-<option value="Telugu">🇮🇳 Telugu</option>
-<option value="Spanish">🌎 Spanish</option>
-<option value="French">🌎 French</option>
-<option value="German">🌎 German</option>
-<option value="Chinese">🌎 Chinese</option>
-<option value="Japanese">🌎 Japanese</option>
+<option value="English">English</option>
+<option value="मराठी">मराठी</option>
+<option value="Hindi">Hindi</option>
+<option value="Tamil">Tamil</option>
+<option value="Spanish">Spanish</option>
+<option value="French">French</option>
+<option value="German">German</option>
+<option value="Chinese">Chinese</option>
+<option value="Japanese">Japanese</option>
 </select>
 
 </div>
+
 </div>
 </div>
 
 <!-- FILMS -->
 
 <div class="section">
-<div class="sectionTitle">🔥 Featured Reviews</div>
+<h3 id="sectionTitle">🔥 Featured Reviews</h3>
 <div class="grid" id="grid"></div>
 </div>
-
-<!-- OVERLAY -->
-
-<div id="overlay" class="overlay">
-<span class="close-btn" onclick="closeOverlay()">✖</span>
-
-<div class="overlay-content">
-<img id="overlayPoster" class="overlay-poster">
-
-<div>
-<h2 id="overlayTitle"></h2>
-<p id="overlayReview"></p>
-</div>
-
-</div>
-</div>
-
-<!-- FOOTER -->
 
 <footer>
 <a href="about.html">About</a>
@@ -292,7 +204,27 @@ footer a:hover{
 let films=[];
 let currentLanguage="English";
 
-/* LOAD DATA */
+/* UI TRANSLATION ENGINE 🌍 */
+
+const translations={
+    English:{
+        title:"Cinema Beyond Reviews.",
+        tagline:"Discover films through emotion, conflict, and cinematic impact.",
+        featured:"🔥 Featured Reviews"
+    },
+    मराठी:{
+        title:"रिव्ह्यूच्या पलीकडील सिनेमा.",
+        tagline:"भावना, संघर्ष आणि सिनेमॅटिक प्रभावातून चित्रपट शोधा.",
+        featured:"🔥 वैशिष्ट्यीकृत चित्रपट"
+    },
+    Hindi:{
+        title:"रिव्यू से आगे सिनेमा.",
+        tagline:"भावना, संघर्ष और सिनेमाई प्रभाव के माध्यम से फिल्में खोजें.",
+        featured:"🔥 फीचर्ड रिव्यू"
+    }
+};
+
+/* LOAD */
 
 fetch('reviews.json')
 .then(res=>res.json())
@@ -309,55 +241,26 @@ function renderFilms(data){
 
     grid.innerHTML=data.map(film=>`
 
-        <div class="card" onclick="openOverlay('${film.movie}')">
-            <img src="${film.poster}" 
+        <div class="card">
+            <img src="${film.poster}"
             onerror="this.src='https://via.placeholder.com/300x450?text=No+Poster'">
         </div>
 
     `).join("");
 }
 
-/* SEARCH */
-
-document.getElementById("search").addEventListener("input",()=>{
-
-    const value=document.getElementById("search").value.toLowerCase();
-
-    const filtered=films.filter(film=>
-        film.movie.toLowerCase().includes(value)
-    );
-
-    renderFilms(filtered);
-});
-
-/* LANGUAGE */
+/* LANGUAGE SWITCH */
 
 document.getElementById("languageSwitcher").addEventListener("change",(e)=>{
+
     currentLanguage=e.target.value;
+
+    const t=translations[currentLanguage] || translations.English;
+
+    document.getElementById("heroTitle").innerText=t.title;
+    document.getElementById("heroTagline").innerText=t.tagline;
+    document.getElementById("sectionTitle").innerText=t.featured;
 });
-
-/* OVERLAY */
-
-function openOverlay(movieName){
-
-    const film=films.find(f=>f.movie===movieName);
-
-    if(!film) return;
-
-    document.getElementById("overlay").style.display="flex";
-    document.getElementById("overlayPoster").src=film.poster;
-    document.getElementById("overlayTitle").innerText=film.movie;
-
-    const reviewText=film.details?.[currentLanguage] 
-        || film.details?.["English"] 
-        || "Review not available.";
-
-    document.getElementById("overlayReview").innerText=reviewText;
-}
-
-function closeOverlay(){
-    document.getElementById("overlay").style.display="none";
-}
 
 </script>
 
